@@ -1,29 +1,25 @@
 #pragma once
 #include "operations.h"
-#include <random>
 
+using Program = std::vector<char>;
+using CRProgram = std::vector<char> const &;
 std::vector<char> grow(int maxDepth) {
   std::vector<char> program;
   int nextLevelLen = 1;
   int depth = 1;
-
-  std::random_device dev;
-  std::mt19937 rng(dev());
-  std::uniform_int_distribution<std::mt19937::result_type> all(0, arities.size() - 1);
-  std::uniform_int_distribution<std::mt19937::result_type> terminals(0, maxTerminalId);
 
   while (nextLevelLen > 0) {
     int levelLen = nextLevelLen;
     nextLevelLen = 0;
     if (depth == maxDepth) {
       for (int i = 0; i < levelLen; ++i) {
-        int newOp = terminals(rng);
+        int newOp = randTerminals(rng);
         program.push_back(newOp);
       }
     }
     else {
       for (int i = 0; i < levelLen; ++i) {
-        int newOp = all(rng);
+        int newOp = randAll(rng);
         nextLevelLen += arities[newOp];
         program.push_back(newOp);
       }
@@ -31,4 +27,11 @@ std::vector<char> grow(int maxDepth) {
     ++depth;
   }
   return program;
+}
+std::vector<Program> ramp(int nPrograms, int maxDepth) {
+  std::vector<Program> programs;
+  for (int i = 0; i < nPrograms; ++i) {
+    programs.push_back(grow(maxDepth));
+  }
+  return programs;
 }

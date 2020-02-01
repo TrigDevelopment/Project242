@@ -2,9 +2,14 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <random>
 
 int maxTerminalId = 1;
 std::vector<int> arities = { 0, 0, 1, 2, 2 };
+std::random_device dev;
+std::mt19937 rng(dev());
+std::uniform_int_distribution<std::mt19937::result_type> randAll(0, arities.size() - 1);
+std::uniform_int_distribution<std::mt19937::result_type> randTerminals(0, maxTerminalId);
 double proceed(int id, std::vector<double> const & args, double x) noexcept {
   switch (id) {
   case 0: return 1;
