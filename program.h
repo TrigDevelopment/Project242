@@ -1,7 +1,3 @@
-#pragma once
-#include "init.h"
-#include <deque>
-
 double proceed(CRProgram program, double x) {
   std::deque<double> deq;
   for (auto it = program.rbegin(); it != program.rend(); ++it) {

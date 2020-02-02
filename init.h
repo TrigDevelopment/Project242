@@ -1,6 +1,3 @@
-#pragma once
-#include "debugOperations.h"
-
 std::random_device dev;
 std::mt19937 rng(dev());
 RandomInt randAll(0, arities.size() - 1);

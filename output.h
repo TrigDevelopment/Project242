@@ -1,7 +1,3 @@
-#pragma once
-#include "fitness.h"
-#include <iostream>
-
 void output(CRProgram program) {
   for (char id : program) {
     std::cout << names[id] << ' ';

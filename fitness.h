@@ -1,6 +1,3 @@
-#pragma once
-#include "program.h"
-
 double goal(double x) {
   return exp(x);
 }

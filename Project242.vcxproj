@@ -116,6 +116,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="debugOperations.h" />
+    <ClInclude Include="debugOperations2.h" />
     <ClInclude Include="fitness.h" />
     <ClInclude Include="init.h" />
     <ClInclude Include="operations.h" />
