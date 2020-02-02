@@ -115,10 +115,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="debugOperations.h" />
     <ClInclude Include="fitness.h" />
     <ClInclude Include="init.h" />
     <ClInclude Include="operations.h" />
+    <ClInclude Include="output.h" />
     <ClInclude Include="program.h" />
+    <ClInclude Include="types.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

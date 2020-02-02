@@ -9,7 +9,7 @@ double getFitness(CRProgram program) {
   for (int x = 0; x < 10; ++x) {
     error += abs(goal(x) - proceed(program, x));
   }
-  return error * program.size();
+  return error;
 }
 std::vector<double> getFitnesses(std::vector<Program> const & programs) {
   std::vector<double> fitnesses;

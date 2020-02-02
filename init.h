@@ -1,10 +1,12 @@
 #pragma once
-#include "operations.h"
+#include "debugOperations.h"
 
-using Program = std::vector<char>;
-using CRProgram = std::vector<char> const &;
-std::vector<char> grow(int maxDepth) {
-  std::vector<char> program;
+std::random_device dev;
+std::mt19937 rng(dev());
+RandomInt randAll(0, arities.size() - 1);
+RandomInt randTerminals(0, maxTerminalId);
+Program grow(int maxDepth) {
+  Program program;
   int nextLevelLen = 1;
   int depth = 1;
 
