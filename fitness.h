@@ -16,9 +16,9 @@ std::vector<double> getFitnesses(Programs const & programs) {
   return fitnesses;
 }
 Program getBest(Programs const & programs) {
-  Program minProgram;
-  double minFitness = std::numeric_limits<double>::max();
-  for (auto program : programs) {
+  Program minProgram = programs[0];
+  double minFitness = getFitness(programs[0]);
+  for (auto const & program : programs) {
     auto fitness = getFitness(program);
     if (fitness < minFitness) {
       minProgram = program;

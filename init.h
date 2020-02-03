@@ -28,10 +28,13 @@ Program grow(int maxDepth) {
   }
   return program;
 }
-std::vector<Program> ramp(int nPrograms, int maxDepth) {
+std::vector<Program> ramp(size_t nPrograms, size_t maxDepth, size_t maxSize) {
   std::vector<Program> programs;
-  for (int i = 0; i < nPrograms; ++i) {
-    programs.push_back(grow(maxDepth));
+  while (programs.size() < nPrograms) {
+    auto newProgram = grow(maxDepth);
+    if (newProgram.size() <= maxSize) {
+      programs.push_back(newProgram);
+    }
   }
   return programs;
 }

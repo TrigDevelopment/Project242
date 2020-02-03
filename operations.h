@@ -29,6 +29,7 @@ Id opId(std::string name) {
       return i;
     }
   }
+  return 0;
 }
 
 double proceed(int id, std::vector<double> const & args, double x) noexcept {

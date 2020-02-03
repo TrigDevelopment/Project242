@@ -1,46 +1,31 @@
-#include <random>
-#include <vector>
 #include <array>
-#include <string>
 #include <deque>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <limits>
+#include <random>
+#include <string>
+#include <vector>
 
+#include "params.h"
 #include "types.h"
 #include "operations.h"
 #include "init.h"
 #include "program.h"
 #include "fitness.h"
+#include "sift.h"
 #include "output.h"
 #include "scenarios.h"
 
-const int nGenerations = 20;
-const int nPrograms = 20;
-const int maxDepth = 40;
 RandomInt randProgram(0, nPrograms);
-void sift(Programs & programs, std::vector<double> const & fitnesses) {
-  std::vector<size_t> toKill;
-  auto sum = getSum(fitnesses);
-  for (size_t i = 0; i < programs.size(); ++i) {
-    //output(programs[i]);
-    //std::cout << fitnesses[i] / sum << std::endl;
-    //std::cout << std::endl;
-    if (fitnesses[i] / sum < static_cast<double>(rand()) / RAND_MAX) {
-      toKill.push_back(i);
-    }
-  }
-  for (int i = toKill.size() - 1; i >= 0; --i) {
-    programs.erase(programs.begin() + toKill[i]);
-  }
-}
+
 void crossover(std::vector<Program> & programs) {
   while (programs.size() < nPrograms) {
     auto first = randBig(dev) % programs.size();
     auto second = randBig(dev) % programs.size();
     size_t toRootI = randBig(dev) % programs[first].size();
     size_t fromRootI = randBig(dev) % programs[second].size();
-    auto newProgram = breed(programs[first], programs[second], toRootI, fromRootI);
+    auto newProgram = breed(programs[first], programs[second], toRootI, fromRootI, maxSize);
     programs.push_back(newProgram);
   }
 }
@@ -74,7 +59,7 @@ void debugProgram() {
     opId("B_1"),
       opId("A_7")
   };
-  auto breededProgram = breed(smallerProgram, otherSmallProgram, 2, 0);
+  auto breededProgram = breed(smallerProgram, otherSmallProgram, 2, 0, maxSize);
   std::ofstream primes("tree.txt");
   primes << tform(breededProgram) << std::endl;
   //primes << tform(otherSmallProgram) << std::endl;
@@ -85,17 +70,20 @@ void debugProgram() {
   std::cout << tform(smallerProgram) << std::endl;
   std::cout << tform(breededProgram) << std::endl;
 }
-int main() {
-  std::vector<Program> programs = ramp(nPrograms, maxDepth);
+void cross() {
+  std::vector<Program> programs = ramp(nPrograms, maxDepth, maxSize);
+  std::cout << "Programs generated." << std::endl;
   for (size_t i = 0; i < nGenerations; ++i) {
     auto fitnesses = getFitnesses(programs);
-    //output(fitnesses);
     sift(programs, fitnesses);
     crossover(programs);
   }
   auto best = getBest(programs);
   output(best);
   std::cout << getFitness(best) << std::endl;
+}
+int main() {
+  cross();
   system("pause");
   return 0;
 }

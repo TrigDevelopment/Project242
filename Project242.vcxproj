@@ -115,14 +115,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="debugOperations.h" />
-    <ClInclude Include="debugOperations2.h" />
     <ClInclude Include="fitness.h" />
     <ClInclude Include="init.h" />
     <ClInclude Include="operations.h" />
     <ClInclude Include="output.h" />
+    <ClInclude Include="params.h" />
     <ClInclude Include="program.h" />
     <ClInclude Include="scenarios.h" />
+    <ClInclude Include="sift.h" />
+    <ClInclude Include="tests.h" />
     <ClInclude Include="types.h" />
   </ItemGroup>
   <ItemGroup>

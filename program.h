@@ -36,9 +36,10 @@ Indexes getLevelSizes(CRProgram program) {
   return sizes;
 }
 Indexes getLevelStarts(CRProgram program) {
-  std::vector<size_t> starts;
-  starts.push_back(0);
   auto const sizes = getLevelSizes(program);
+  std::vector<size_t> starts;
+  starts.reserve(sizes.size() + 1);
+  starts.push_back(0);
   for (auto const & size : sizes) {
     auto last = starts[starts.size() - 1];
     starts.push_back(last + size);
@@ -87,7 +88,7 @@ void killChildren(Program & program, size_t rootI) {
     program.erase(program.begin() + toKill[i], program.begin() + toKill[i + 1]);
   }
 }
-Program breed(CRProgram to, CRProgram from, size_t toRootI, size_t fromRootI) {
+Program breed(CRProgram to, CRProgram from, size_t toRootI, size_t fromRootI, size_t maxSize) {
   auto newProgram(to);
   killChildren(newProgram, toRootI);
   newProgram[toRootI] = getTerminal(); // to make newProgram valid tree after killing children
@@ -96,19 +97,18 @@ Program breed(CRProgram to, CRProgram from, size_t toRootI, size_t fromRootI) {
   Indexes insertionPoints;
   auto point = toRootI;
   auto levelI = getLevelI(toRootI, getLevelStops(newProgram));
-  std::cout << tform(newProgram) << std::endl;
   for (size_t intervalI = 0; intervalI < branchIntervals.size(); intervalI += 2) {
     ++levelI;
     if (levelI < levelStarts.size()) {
       auto prevPoint = point;
       point = levelStarts[levelI];
       for (size_t i = levelStarts[levelI - 1]; i < prevPoint; ++i) {
-        point += arities[to[i]];
+        point += arities[newProgram[i]];
       }
       insertionPoints.push_back(point);
     }
     else {
-      insertionPoints.push_back(to.size());
+      insertionPoints.push_back(newProgram.size());
     }
   }
   newProgram[toRootI] = from[fromRootI];
@@ -117,5 +117,10 @@ Program breed(CRProgram to, CRProgram from, size_t toRootI, size_t fromRootI) {
       from.begin() + branchIntervals[i * 2], 
       from.begin() + branchIntervals[i * 2 + 1]);
   }
-  return newProgram;
+  if (newProgram.size() > maxSize || getLevelSizes(newProgram).size() > maxDepth) {
+    return from;
+  }
+  else {
+    return newProgram;
+  }
 }
