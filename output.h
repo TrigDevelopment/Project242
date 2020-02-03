@@ -1,13 +1,16 @@
 void output(CRProgram program) {
-  for (char id : program) {
-    std::cout << names[id] << ' ';
-  }
-  std::cout << std::endl;
+  std::cout << tform(program) << std::endl;
 }
 void output(std::vector<Program> programs) {
   for (auto const & program : programs) {
     output(program);
   }
+}
+template <typename T> void output(T const & elements) {
+  for (auto const & element : elements) {
+    std::cout << element << ' ';
+  }
+  std::cout << std::endl;
 }
 std::string mform(CRProgram program) {
   std::deque<std::string> deq;
@@ -63,7 +66,7 @@ std::string tform(CRProgram program) {
     auto id = program[i];
     auto arity = arities[id];
     str += getSpaces(stack.size() * 1)
-      + names[id] + ":" + std::to_string(arity) + "\n";
+      + names[id] + "[" + std::to_string(i) + "]"/* + ":" + std::to_string(arity)*/ + "\n";
     ++lefts[stack.size()];
     if (!stack.empty()) {
       --stack[stack.size() - 1];

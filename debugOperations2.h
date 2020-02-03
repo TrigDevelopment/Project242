@@ -1,11 +1,6 @@
 int maxTerminalId = 29;
 size_t terminalsStart = 29;
 
-
-struct Operation {
-  std::string name;
-  int arity;
-};
 std::vector<Operation> operations = {
   Operation{"A_0", 0}, Operation{"A_1", 0}, Operation{"A_2", 0},
   Operation{"A_3", 0}, Operation{"A_4", 0}, Operation{"A_5", 0},
@@ -26,6 +21,7 @@ std::vector<Operation> operations = {
 
   Operation{"C_0", 2}, Operation{"C_1", 2}, Operation{"C_2", 2},
   Operation{"C_3", 2}, Operation{"C_4", 2}, Operation{"C_5", 2},
+  Operation{"C_6", 2}, Operation{"C_7", 2}, Operation{"C_8", 2},
 
   Operation{"D_0", 3}, Operation{"D_1", 3}, Operation{"D_2", 3},
   Operation{"D_3", 3}, Operation{"D_4", 3}, Operation{"D_5", 3},
@@ -35,7 +31,7 @@ std::vector<Operation> operations = {
   Operation{"F_0", 5}, Operation{"F_1", 5}, Operation{"F_2", 5}
 };
 Id opId(std::string name) {
-  for (size_t i = 0; i < operations.size(); ++i) {
+  for (Id i = 0; i < operations.size(); ++i) {
     if (operations[i].name == name) {
       return i;
     }
@@ -62,4 +58,7 @@ double proceed(int id, std::vector<double> const & args, double x) noexcept {
   switch (id) {
   default: return 0;
   }
+}
+Id getTerminal() {
+  return opId("A_0");
 }

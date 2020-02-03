@@ -18,7 +18,7 @@ double proceed(CRProgram program, double x) {
   }
   return deq.front();
 }
-std::vector<size_t> getLevelSizes(CRProgram program) {
+Indexes getLevelSizes(CRProgram program) {
   std::vector<size_t> sizes;
   sizes.push_back(1);
   size_t current = 1;
@@ -35,7 +35,7 @@ std::vector<size_t> getLevelSizes(CRProgram program) {
   }
   return sizes;
 }
-std::vector<size_t> getLevelStarts(CRProgram program) {
+Indexes getLevelStarts(CRProgram program) {
   std::vector<size_t> starts;
   starts.push_back(0);
   auto const sizes = getLevelSizes(program);
@@ -46,33 +46,76 @@ std::vector<size_t> getLevelStarts(CRProgram program) {
   starts.pop_back();
   return starts;
 }
-void killChildren(Program & program, size_t rootI) {
-  auto levels = getLevelStarts(program);
-  levels.push_back(program.size());
+Indexes getLevelStops(CRProgram program) {
+  auto stops = getLevelStarts(program);
+  stops.push_back(program.size());
+  return stops;
+}
+size_t getLevelI(size_t i, std::vector<size_t> const & levelStops) {
   size_t levelI = 0;
-  while (rootI >= levels[levelI + 1]) {
+  while (i >= levelStops[levelI + 1]) {
     ++levelI;
   }
-
-  std::vector<size_t> toKill;
+  return levelI;
+}
+std::vector<size_t> markChildren(CRProgram program, size_t rootI) {
+  auto stops = getLevelStops(program);
+  auto levelI = getLevelI(rootI, stops);
+  std::vector<size_t> marked;
   size_t left = rootI;
   size_t right = rootI + 1;
-  while (levelI + 1 < levels.size() - 1) {
+  while (levelI + 1 < stops.size() - 1) {
     ++levelI;
     auto prevLeft = left;
     auto prevRight = right;
-    left = levels[levelI];
-    for (auto i = levels[levelI - 1]; i < prevLeft; ++i) {
+    left = stops[levelI];
+    for (auto i = stops[levelI - 1]; i < prevLeft; ++i) {
       left += arities[program[i]];
     }
     right = left;
     for (auto i = prevLeft; i < prevRight; ++i) {
       right += arities[program[i]];
     }
-    toKill.push_back(left);
-    toKill.push_back(right);
+    marked.push_back(left);
+    marked.push_back(right);
   }
+  return marked;
+}
+void killChildren(Program & program, size_t rootI) {
+  std::vector<size_t> toKill = markChildren(program, rootI);
   for (int i = toKill.size() - 2; i >= 0; i -= 2) {
     program.erase(program.begin() + toKill[i], program.begin() + toKill[i + 1]);
   }
+}
+Program breed(CRProgram to, CRProgram from, size_t toRootI, size_t fromRootI) {
+  auto newProgram(to);
+  killChildren(newProgram, toRootI);
+  newProgram[toRootI] = getTerminal(); // to make newProgram valid tree after killing children
+  auto branchIntervals = markChildren(from, fromRootI);
+  auto levelStarts = getLevelStarts(newProgram);
+  Indexes insertionPoints;
+  auto point = toRootI;
+  auto levelI = getLevelI(toRootI, getLevelStops(newProgram));
+  std::cout << tform(newProgram) << std::endl;
+  for (size_t intervalI = 0; intervalI < branchIntervals.size(); intervalI += 2) {
+    ++levelI;
+    if (levelI < levelStarts.size()) {
+      auto prevPoint = point;
+      point = levelStarts[levelI];
+      for (size_t i = levelStarts[levelI - 1]; i < prevPoint; ++i) {
+        point += arities[to[i]];
+      }
+      insertionPoints.push_back(point);
+    }
+    else {
+      insertionPoints.push_back(to.size());
+    }
+  }
+  newProgram[toRootI] = from[fromRootI];
+  for (int i = insertionPoints.size() - 1; i >= 0; --i){
+    newProgram.insert(newProgram.begin() + insertionPoints[i],
+      from.begin() + branchIntervals[i * 2], 
+      from.begin() + branchIntervals[i * 2 + 1]);
+  }
+  return newProgram;
 }

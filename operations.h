@@ -1,10 +1,35 @@
-#pragma once
-#include "types.h"
-#include <string>
-
 int maxTerminalId = 1;
-Arities arities = { 0, 0, 1, 2, 2 };
-Names names = { "1", "x", "sin", "+", "*" };
+
+std::vector<Operation> operations = {
+  Operation{"1", 0}, Operation{"x", 0},
+  Operation{"sin", 1}, 
+  Operation{"+", 2}, Operation{"*", 2}
+};
+
+Arities createArities() {
+  Arities res;
+  for (auto op : operations) {
+    res.push_back(op.arity);
+  }
+  return res;
+}
+Names createNames() {
+  Names res;
+  for (auto op : operations) {
+    res.push_back(op.name);
+  }
+  return res;
+}
+Arities arities = createArities();
+Names names = createNames();
+
+Id opId(std::string name) {
+  for (Id i = 0; i < operations.size(); ++i) {
+    if (operations[i].name == name) {
+      return i;
+    }
+  }
+}
 
 double proceed(int id, std::vector<double> const & args, double x) noexcept {
   switch (id) {
@@ -15,4 +40,7 @@ double proceed(int id, std::vector<double> const & args, double x) noexcept {
   case 4: return args[0] * args[1];
   default: return 0;
   }
+}
+Id getTerminal() {
+  return opId("1");
 }

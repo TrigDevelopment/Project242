@@ -122,6 +122,7 @@
     <ClInclude Include="operations.h" />
     <ClInclude Include="output.h" />
     <ClInclude Include="program.h" />
+    <ClInclude Include="scenarios.h" />
     <ClInclude Include="types.h" />
   </ItemGroup>
   <ItemGroup>

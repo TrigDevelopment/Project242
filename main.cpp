@@ -4,82 +4,48 @@
 #include <string>
 #include <deque>
 #include <iostream>
+#include <fstream>
+#include <limits>
 
 #include "types.h"
-#include "debugOperations2.h"
+#include "operations.h"
 #include "init.h"
 #include "program.h"
 #include "fitness.h"
 #include "output.h"
-#include <limits>
+#include "scenarios.h"
 
+const int nGenerations = 20;
 const int nPrograms = 20;
+const int maxDepth = 40;
 RandomInt randProgram(0, nPrograms);
-void sift(std::vector<Program> & programs, std::vector<double> const & fitnesses) {
+void sift(Programs & programs, std::vector<double> const & fitnesses) {
   std::vector<size_t> toKill;
   auto sum = getSum(fitnesses);
   for (size_t i = 0; i < programs.size(); ++i) {
-    if (fitnesses[i] / sum < rand() / RAND_MAX) {
+    //output(programs[i]);
+    //std::cout << fitnesses[i] / sum << std::endl;
+    //std::cout << std::endl;
+    if (fitnesses[i] / sum < static_cast<double>(rand()) / RAND_MAX) {
       toKill.push_back(i);
     }
   }
-  for (size_t i = 0; i < toKill.size(); ++i) {
+  for (int i = toKill.size() - 1; i >= 0; --i) {
     programs.erase(programs.begin() + toKill[i]);
   }
 }
-Program breed(CRProgram A, CRProgram B) {
-  return A;
-}
 void crossover(std::vector<Program> & programs) {
   while (programs.size() < nPrograms) {
-    auto first = randProgram(rng);
-    auto second = randProgram(rng);
-    programs.push_back(breed(programs[first], programs[second]));
+    auto first = randBig(dev) % programs.size();
+    auto second = randBig(dev) % programs.size();
+    size_t toRootI = randBig(dev) % programs[first].size();
+    size_t fromRootI = randBig(dev) % programs[second].size();
+    auto newProgram = breed(programs[first], programs[second], toRootI, fromRootI);
+    programs.push_back(newProgram);
   }
-}
-void growRandom() {
-  Program minProgram;
-  double minError = std::numeric_limits<double>::max();
-  for (int i = 0; i < 4000 * 1000; ++i) {
-    auto program = grow(24);
-    auto error = getFitness(program);
-    if (error < minError) {
-      minProgram = program;
-      minError = error;
-    }
-  }
-  output(minProgram);
-  std::cout << minError << std::endl;
-  std::cout << tform(minProgram) << std::endl;
 }
 void debugProgram() {
-  auto pr = Program{ 30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50, 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29 };
-  auto pr1 = Program{ 30,31,32,33,34,35,36,37,38, 0,0,0,  42,43,44,45,46,47,48,49,50, 0,1,2,3,4,5,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29 };
-  auto pr3 = Program{ 31,31,32,33,36,37,38, 0,0,0,  42,43,44, 0,1,2,3,4,5,12,13,14,15,16,17 };
-  auto pr4 = Program{ 31,31,32,33,36,37,38, 0,0,0,  0,0,0, 0,1,2,3,4,5 };
-  auto pr2 = Program{ 31,31,32,36,37,38, 0,0,0,  0,1,2,3,4,5 };
-  auto s2 = tform(pr2);
-  std::cout << s2 << std::endl;
-  killChildren(pr2, 2);
-  auto s = tform(pr2);
-  std::cout << s << std::endl;
-}
-void debugProgram2() {
   auto fullProgram = Program{
-    opId("F_0"),
-      opId("D_0"), opId("D_1"), opId("D_2"), opId("D_3"), opId("D_4"),
-        opId("C_0"), opId("C_1"), opId("C_2"),
-        opId("C_3"), opId("C_4"), opId("C_5"),
-        opId("C_6"), opId("C_7"), opId("C_8"),
-        opId("C_9"), opId("C_10"), opId("C_11"),
-        opId("C_12"), opId("C_13"), opId("C_14"),
-          opId("A_0"),opId("A_1"),opId("A_2"),opId("A_3"),opId("A_4"),opId("A_5"),
-          opId("A_6"),opId("A_7"),opId("A_8"),opId("A_9"),opId("A_10"),opId("A_11"),
-          opId("A_12"),opId("A_13"),opId("A_14"),opId("A_15"),opId("A_16"),opId("A_17"),
-          opId("A_18"),opId("A_19"),opId("A_20"),opId("A_21"),opId("A_22"),opId("A_23"),
-          opId("A_24"),opId("A_25"),opId("A_26"),opId("A_27"),opId("A_28"),opId("A_29"),
-  };
-  auto fullProgram2 = Program{
     opId("D_0"),
       opId("D_0"), opId("D_1"), opId("D_2"),
         opId("C_0"), opId("C_1"), opId("C_2"),
@@ -89,29 +55,47 @@ void debugProgram2() {
           opId("A_6"),opId("A_7"),opId("A_8"),opId("A_9"),opId("A_10"),opId("A_11"),
           opId("A_12"),opId("A_13"),opId("A_14"),opId("A_15"),opId("A_16"),opId("A_17"),
   };
-  std::cout << tform(fullProgram2) << std::endl;
+  auto smallerProgram = Program{
+    opId("D_0"),
+      opId("B_0"), opId("D_1"), opId("B_2"),
+        opId("C_0"),
+        opId("C_3"), opId("C_4"), opId("C_5"),
+        opId("A_20"),
+          opId("A_0"),opId("A_1"),
+          opId("A_6"),opId("A_7"),opId("A_8"),opId("A_9"),opId("A_10"),opId("A_11")
+  };
+  auto smallProgram = Program{
+    opId("D_4"),
+      opId("A_20"),
+      opId("A_21"),
+      opId("A_22")
+  };
+  auto otherSmallProgram = Program{
+    opId("B_1"),
+      opId("A_7")
+  };
+  auto breededProgram = breed(smallerProgram, otherSmallProgram, 2, 0);
+  std::ofstream primes("tree.txt");
+  primes << tform(breededProgram) << std::endl;
+  //primes << tform(otherSmallProgram) << std::endl;
+  primes.close();
+  //std::cout << tform(fullProgram) << std::endl;
+  //killChildren(fullProgram, 0);
+  //fullProgram[0] = opId("A_0");
+  std::cout << tform(smallerProgram) << std::endl;
+  std::cout << tform(breededProgram) << std::endl;
 }
 int main() {
-  debugProgram2();
-  //for (int i = 0; i < 1000; ++i) {
-  //  auto pr = grow(80);
-  //  RandomInt random(0, pr.size() - 1);
-  //  killChildren(pr, random(dev));
-  //}
-  //auto s = tform(Program {2, 2, 2, 1});
-  //growRandom();
-  //Program pr = { 2, 2, 1 };
-  //std::cout << tform(pr) << std::endl;
-  //auto programs = ramp(nPrograms, 3);
-  //for (auto const & program : programs) {
-  //  std::cout << tform(program) << std::endl;
-  //}
-  //std::vector<Program> programs = ramp(nPrograms, 8);
-  //for (size_t i = 0; i < 20; ++i) {
-  //  auto fitnesses = getFitnesses(programs);
-  //  sift(programs, fitnesses);
-  //  crossover(programs);
-  //}
+  std::vector<Program> programs = ramp(nPrograms, maxDepth);
+  for (size_t i = 0; i < nGenerations; ++i) {
+    auto fitnesses = getFitnesses(programs);
+    //output(fitnesses);
+    sift(programs, fitnesses);
+    crossover(programs);
+  }
+  auto best = getBest(programs);
+  output(best);
+  std::cout << getFitness(best) << std::endl;
   system("pause");
   return 0;
 }

@@ -8,12 +8,24 @@ double getFitness(CRProgram program) {
   }
   return error;
 }
-std::vector<double> getFitnesses(std::vector<Program> const & programs) {
+std::vector<double> getFitnesses(Programs const & programs) {
   std::vector<double> fitnesses;
   for (auto const & program : programs) {
     fitnesses.push_back(getFitness(program));
   }
   return fitnesses;
+}
+Program getBest(Programs const & programs) {
+  Program minProgram;
+  double minFitness = std::numeric_limits<double>::max();
+  for (auto program : programs) {
+    auto fitness = getFitness(program);
+    if (fitness < minFitness) {
+      minProgram = program;
+      minFitness = fitness;
+    }
+  }
+  return minProgram;
 }
 double getSum(std::vector<double> fitnesses) {
   double sum = 0;
