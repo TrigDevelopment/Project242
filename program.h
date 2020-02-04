@@ -1,22 +1,36 @@
-double proceed(CRProgram program, double x) {
-  std::deque<double> deq;
+double oldProceed(CRProgram program, double x) {
+  std::vector<double> deq;
   for (auto it = program.rbegin(); it != program.rend(); ++it) {
     auto operationId = *it;
     std::vector<double> args;
     if (arities[operationId] == 1) {
       args.push_back(deq.front());
-      deq.pop_front();
+      deq.erase(deq.begin());
+      //deq.pop_front();
     }
     else if (arities[operationId] == 2) {
       args.push_back(deq.front());
-      deq.pop_front();
+      deq.erase(deq.begin());
+      //deq.pop_front();
       args.push_back(deq.front());
-      deq.pop_front();
+      deq.erase(deq.begin());
+      //deq.pop_front();
       std::reverse(args.begin(), args.end());
     }
-    deq.push_back(proceed(operationId, args, x));
+    deq.push_back(oldProceed(operationId, args, x));
   }
   return deq.front();
+}
+double proceed(CRProgram program, double x) {
+  std::vector<double> deq(program.size());
+  auto argI = program.size();
+  for (int i = program.size() - 1; i >= 0; --i) {
+    auto const opId = program[i];
+    auto const arity = arities[opId];
+    argI -= arity;
+    deq[i] = proceed(opId, deq, argI, x);
+  }
+  return deq[0];
 }
 Indexes getLevelSizes(CRProgram program) {
   std::vector<size_t> sizes;

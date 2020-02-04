@@ -43,6 +43,9 @@ void mutate(Programs & programs) {
 void evolution() {
   std::vector<Program> programs = ramp(nPrograms, maxDepth, maxSize);
   for (size_t i = 0; i < nGenerations; ++i) {
+    if (i % 100 == 0 && i > 0) {
+      std::cout << "Generation " + std::to_string(i) << std::endl;
+    }
     auto fitnesses = getFitnesses(programs);
     sift(programs, fitnesses);
     crossover(programs);

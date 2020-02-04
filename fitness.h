@@ -3,7 +3,8 @@ double goal(double x) {
 }
 double getFitness(CRProgram program) {
   double error = 0;
-  for (int x = 0; x < 10; ++x) {
+  for (int i = 0; i < 10; ++i) {
+    double x = (static_cast<double>(rand()) / RAND_MAX) * 4 - 1;
     error += abs(goal(x) - proceed(program, x));
   }
   return error;

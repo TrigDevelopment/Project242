@@ -32,7 +32,17 @@ Id opId(std::string name) {
   return 0;
 }
 
-double proceed(int id, std::vector<double> const & args, double x) noexcept {
+double proceed(Id id, std::vector<double> const & deq, size_t argsStart, double x) noexcept {
+  switch (id) {
+  case 0: return 1;
+  case 1: return x;
+  case 2: return sin(deq[argsStart]);
+  case 3: return deq[argsStart] + deq[argsStart + 1];
+  case 4: return deq[argsStart] * deq[argsStart + 1];
+  default: return 0;
+  }
+}
+double oldProceed(int id, std::vector<double> const & args, double x) noexcept {
   switch (id) {
   case 0: return 1;
   case 1: return x;
