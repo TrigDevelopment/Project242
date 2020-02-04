@@ -5,7 +5,7 @@ std::vector<Operation> operations = {
   Operation{"sin", 1}, 
   Operation{"+", 2}, Operation{"*", 2}
 };
-
+std::vector<Range> arityRanges = { Range{0, 2}, Range{2, 3}, Range{3, 5} };
 Arities createArities() {
   Arities res;
   for (auto op : operations) {

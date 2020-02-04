@@ -5,7 +5,7 @@ void sift(Programs & programs, std::vector<double> const & fitnesses) {
   }
   std::sort(pairs.begin(), pairs.end(),
     [](std::pair<size_t, double> const & a, std::pair<size_t, double> const & b) {
-    return a.second < b.second;
+    return a.second > b.second;
   });
   auto size = pairs.size();
   while (pairs.size() > size / 2) {

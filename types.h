@@ -8,7 +8,12 @@ using Names = std::vector<std::string>;
 using Indexes = std::vector<size_t>;
 using CRIndexes = std::vector<size_t> const &;
 std::string tform(CRProgram program);
+std::string mform(CRProgram program);
 struct Operation {
   std::string name;
   int arity;
+};
+struct Range {
+  int start;
+  int end;
 };

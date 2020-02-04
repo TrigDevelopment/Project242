@@ -1,5 +1,6 @@
 void output(CRProgram program) {
   std::cout << tform(program) << std::endl;
+  std::cout << mform(program) << std::endl;
 }
 void output(std::vector<Program> programs) {
   for (auto const & program : programs) {
@@ -37,7 +38,7 @@ std::string mform(CRProgram program) {
       next = "x";
       break;
     case 2:
-      next = "sin " + args[0];
+      next = "(sin(" + args[0] + "))";
       break;
     case 3:
       next = "(" + args[0] + "+" + args[1] + ")";
