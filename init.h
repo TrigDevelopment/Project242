@@ -1,9 +1,4 @@
-std::random_device dev;
-std::mt19937 rng(dev());
-RandomInt randAll(0, arities.size() - 1);
-RandomInt randTerminals(0, maxTerminalId);
-RandomInt randBig(0, std::numeric_limits<int>::max());
-Program grow(int maxDepth) {
+Program growBreadth(int maxDepth) {
   Program program;
   int nextLevelLen = 1;
   int depth = 1;
@@ -28,10 +23,25 @@ Program grow(int maxDepth) {
   }
   return program;
 }
-std::vector<Program> ramp(size_t nPrograms, size_t maxDepth, size_t maxSize) {
-  std::vector<Program> programs;
+Program growDepth(size_t maxDepth) {
+  if (maxDepth == 1) {
+    return Program{getRandTerminalId()};
+  }
+  else {
+    Id id = getRandOpId();
+    Program newProgram{ id };
+    auto arity = getArity(newProgram, 0);
+    for (size_t i = 0; i < arity; ++i) {
+      auto branch = growDepth(maxDepth - 1);
+      newProgram.insert(newProgram.end(), branch.begin(), branch.end());
+    }
+    return newProgram;
+  }
+}
+Programs rampDepth(size_t nPrograms, size_t maxDepth, size_t maxSize) {
+  Programs programs;
   while (programs.size() < nPrograms) {
-    auto newProgram = grow(maxDepth);
+    auto newProgram = growDepth(maxDepth);
     if (newProgram.size() <= maxSize) {
       programs.push_back(newProgram);
     }

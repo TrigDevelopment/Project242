@@ -1,7 +1,7 @@
 void breedTest() {
   auto to = Program{ *,sin,sin,sin,*,sin,x,1,x };
   auto from = Program{ sin,+,*,1,1,1 };
-  breed(to, from, 2, 0) == ?
+  breedBreadth(to, from, 2, 0) == ?
 }
 
 void debugProgram() {
@@ -34,14 +34,14 @@ void debugProgram() {
     opId("B_1"),
       opId("A_7")
   };
-  auto breededProgram = breed(smallerProgram, otherSmallProgram, 2, 0, maxSize);
+  auto breededProgram = breedBreadth(smallerProgram, otherSmallProgram, 2, 0, maxSize);
   std::ofstream primes("tree.txt");
-  primes << tform(breededProgram) << std::endl;
-  //primes << tform(otherSmallProgram) << std::endl;
+  primes << tformBreadth(breededProgram) << std::endl;
+  //primes << tformBreadth(otherSmallProgram) << std::endl;
   primes.close();
-  //std::cout << tform(fullProgram) << std::endl;
-  //killChildren(fullProgram, 0);
+  //std::cout << tformBreadth(fullProgram) << std::endl;
+  //killChildrenBreadth(fullProgram, 0);
   //fullProgram[0] = opId("A_0");
-  std::cout << tform(smallerProgram) << std::endl;
-  std::cout << tform(breededProgram) << std::endl;
+  std::cout << tformBreadth(smallerProgram) << std::endl;
+  std::cout << tformBreadth(breededProgram) << std::endl;
 }

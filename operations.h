@@ -32,7 +32,7 @@ Id opId(std::string name) {
   return 0;
 }
 
-double proceed(Id id, std::vector<double> const & deq, size_t argsStart, double x) noexcept {
+double proceedBreadth(Id id, std::vector<double> const & deq, size_t argsStart, Input x) {
   switch (id) {
   case 0: return 1;
   case 1: return x;
@@ -42,13 +42,16 @@ double proceed(Id id, std::vector<double> const & deq, size_t argsStart, double 
   default: return 0;
   }
 }
-double oldProceed(int id, std::vector<double> const & args, double x) noexcept {
+double proceedDepth(CRProgram program, size_t i, Input x) {
+  auto id = program[i];
   switch (id) {
   case 0: return 1;
   case 1: return x;
-  case 2: return sin(args[0]);
-  case 3: return args[0] + args[1];
-  case 4: return args[0] * args[1];
+  case 2: return sin(proceedDepth(program, i + 1, x));
+  case 3: return proceedDepth(program, i + 1, x) 
+    + proceedDepth(program, i + 1 + getBranchLenDepth(program, i + 1), x);
+  case 4: return proceedDepth(program, i + 1, x) 
+    * proceedDepth(program, i + 1 + getBranchLenDepth(program, i + 1), x);
   default: return 0;
   }
 }

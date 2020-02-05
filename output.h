@@ -1,6 +1,8 @@
 void output(CRProgram program) {
-  std::cout << tform(program) << std::endl;
-  std::cout << mform(program) << std::endl;
+  std::cout << "Tree: " << std::endl;
+  std::cout << tformDepth(program, 0, 0) << std::endl;
+  std::cout << mformDepth(program, 0) << std::endl;
+  std::cout << std::endl;
 }
 void output(std::vector<Program> programs) {
   for (auto const & program : programs) {
@@ -58,9 +60,9 @@ std::string getSpaces(int nRepetitions) {
   }
   return string;
 }
-std::string tform(CRProgram program) {
+std::string tformBreadth(CRProgram program) {
   std::string str;
-  auto lefts = getLevelStarts(program);
+  auto lefts = getLevelStartsBreadth(program);
   std::vector<int> stack;
   for (size_t x = 0; x < program.size(); ++x) {
     auto i = lefts[stack.size()];
@@ -78,4 +80,30 @@ std::string tform(CRProgram program) {
     }
   }
   return str;
+}
+
+std::string tformDepth(CRProgram program, size_t i, int indent) {
+  auto str = getSpaces(indent);
+  str += getName(program, i) + "[" + std::to_string(i) + "]\n";
+  auto const arity = arities[program[i]];
+  ++i;
+  for (size_t arityI = 0; arityI < arity; ++arityI) {
+    str += tformDepth(program, i, indent + 1);
+    i += getBranchLenDepth(program, i);
+  }
+  return str;
+}
+std::string mformDepth(CRProgram program, size_t startI) {
+  std::string str;
+  auto id = program[startI];
+  switch (id) {
+  case 0: return "1";
+  case 1: return "x";
+  case 2: return "(sin(" + mformDepth(program, startI + 1) + "))";
+  case 3: return "(" + mformDepth(program, startI + 1) 
+    + "+" + mformDepth(program, startI + 1 + getBranchLenDepth(program, startI + 1)) + ")";
+  case 4: return "(" + mformDepth(program, startI + 1)
+    + "*" + mformDepth(program, startI + 1 + getBranchLenDepth(program, startI + 1)) + ")";
+  default: return 0;
+  }
 }
