@@ -9,10 +9,8 @@ using Names = std::vector<std::string>;
 using Indexes = std::vector<size_t>;
 using CRIndexes = std::vector<size_t> const &;
 using Input = double;
-std::string tformBreadth(CRProgram program);
-std::string mform(CRProgram program);
-std::string tformDepth(CRProgram program, size_t i, int indent);
-std::string mformDepth(CRProgram program, size_t startI);
+std::string tform(CRProgram program, size_t i, int indent);
+std::string mform(CRProgram program, size_t startI);
 size_t getBranchLenDepth(CRProgram program, size_t startI);
 struct Operation {
   std::string name;

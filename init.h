@@ -23,7 +23,7 @@ Program growBreadth(int maxDepth) {
   }
   return program;
 }
-Program growDepth(size_t maxDepth) {
+Program grow(size_t maxDepth) {
   if (maxDepth == 1) {
     return Program{getRandTerminalId()};
   }
@@ -32,7 +32,7 @@ Program growDepth(size_t maxDepth) {
     Program newProgram{ id };
     auto arity = getArity(newProgram, 0);
     for (size_t i = 0; i < arity; ++i) {
-      auto branch = growDepth(maxDepth - 1);
+      auto branch = grow(maxDepth - 1);
       newProgram.insert(newProgram.end(), branch.begin(), branch.end());
     }
     return newProgram;
@@ -41,7 +41,7 @@ Program growDepth(size_t maxDepth) {
 Programs rampDepth(size_t nPrograms, size_t maxDepth, size_t maxSize) {
   Programs programs;
   while (programs.size() < nPrograms) {
-    auto newProgram = growDepth(maxDepth);
+    auto newProgram = grow(maxDepth);
     if (newProgram.size() <= maxSize) {
       programs.push_back(newProgram);
     }

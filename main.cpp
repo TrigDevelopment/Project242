@@ -21,7 +21,8 @@
 int main() {
   //breedingDepth();
   //breedingDepth();
-  evolutionDepth();
+  std::cout << rangedRandom({0, 100}) << std::endl;
+  //evolution();
   system("pause");
   return 0;
 }
