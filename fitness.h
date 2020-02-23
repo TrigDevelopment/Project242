@@ -3,9 +3,9 @@ double goal(double x) {
 }
 double getFitness(CRProgram program) {
   double error = 0;
-  for (int i = 0; i < 10; ++i) {
-    double x = (static_cast<double>(rand()) / RAND_MAX) * 10;
-    x = i + 1;
+  for (int i = 0; i < 100; ++i) {
+    double x = static_cast<double>(rand()) / RAND_MAX * 10;
+    //x = i + 1;
     error += abs(goal(x) - proceedDepth(program, 0, x));
   }
   return error;
@@ -28,6 +28,9 @@ Program getBest(Programs const & programs) {
     }
   }
   return minProgram;
+}
+Program getBetter(CRProgram left, CRProgram right) {
+  return getFitness(left) < getFitness(right) ? left : right;
 }
 double getSum(std::vector<double> fitnesses) {
   double sum = 0;

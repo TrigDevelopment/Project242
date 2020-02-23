@@ -1,0 +1,7 @@
+Name,GenerationI,BestFitness,BestProgram
+first,1,18576.6,(x*((sin(((sin(1))*x)))*((x+1)*((x+x)*(1*x)))))
+first,2,18576.6,(x*((sin(((sin(1))*x)))*((x+1)*((x+x)*(1*x)))))
+first,3,18576.6,(x*((sin(((sin(1))*x)))*((x+1)*((x+x)*(1*x)))))
+first,4,18576.6,(x*((sin(((sin(1))*x)))*((x+1)*((x+x)*(1*x)))))
+first,5,18576.6,(x*((sin(((sin(1))*x)))*((x+1)*((x+x)*(1*x)))))
+first,6,18576.6,(x*((sin(((sin(1))*x)))*((x+1)*((x+x)*(1*x)))))

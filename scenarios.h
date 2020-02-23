@@ -25,15 +25,16 @@ void breeding(size_t maxDepth) {
     system("pause");
   }
 }
-void evolution(size_t nGenerations, size_t nPrograms, size_t nMutationsPerGeneration,
+Program evolution(size_t nGenerations, size_t nPrograms, size_t nMutationsPerGeneration,
   size_t maxSize, size_t maxDepth) {
   std::vector<Program> programs = ramp(nPrograms, maxDepth, maxSize);
   for (size_t i = 0; i < nGenerations; ++i) {
-    if (i % 1000 == 0 && i > 0) {
-      std::cout << "Generation " + std::to_string(i) << std::endl;
+    if (i % 100000 == 0 && i > 0) {
+      //std::cout << "Generation " << i << std::endl;
       auto best = getBest(programs);
-      output(best);
-      std::cout << getFitness(best) << std::endl;
+      //output(best);
+      //std::cout << getFitness(best) << std::endl;
+      //myfile << name << "," << i << "," << getFitness(best) << "," << mform(best, 0) << std::endl;
     }
     auto fitnesses = getFitnesses(programs);
     sift(programs, fitnesses);
@@ -42,7 +43,8 @@ void evolution(size_t nGenerations, size_t nPrograms, size_t nMutationsPerGenera
       mutate(programs, maxSize, maxDepth);
     }
   }
-  output(getBest(programs));
+  return getBest(programs);
+  //output(getBest(programs));
 }
 void mutation() {
   while (true) {

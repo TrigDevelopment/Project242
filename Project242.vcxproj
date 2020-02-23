@@ -115,6 +115,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="date.h" />
     <ClInclude Include="fitness.h" />
     <ClInclude Include="helpers.h" />
     <ClInclude Include="init.h" />
