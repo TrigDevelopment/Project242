@@ -15,7 +15,7 @@ Id getRandOpId() {
   return rangedRandom({0, static_cast<int>(operations.size() - 1) });
 }
 Id getRandTerminalId() {
-  return rangedRandom({ 0, maxTerminalId });
+  return rangedRandom(arityRanges[0]);
 }
 std::string getSpaces(int nRepetitions) {
   std::string string("");
