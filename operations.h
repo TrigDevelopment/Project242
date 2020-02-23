@@ -1,29 +1,13 @@
 int maxTerminalId = 1;
 
-std::vector<Operation> operations = {
+std::vector<Operation> const operations = {
   Operation{"1", 0}, Operation{"x", 0},
   Operation{"sin", 1}, Operation{"-", 1},
   Operation{"+", 2}, Operation{"*", 2}
 };
 std::vector<Range> arityRanges = { Range{0, 2}, Range{2, 4}, Range{4, 6} };
-Arities createArities() {
-  Arities res;
-  for (auto op : operations) {
-    res.push_back(op.arity);
-  }
-  return res;
-}
-Names createNames() {
-  Names res;
-  for (auto op : operations) {
-    res.push_back(op.name);
-  }
-  return res;
-}
-Arities arities = createArities();
-Names names = createNames();
 
-Id opId(std::string name) {
+Id opId(std::string const & name) {
   for (Id i = 0; i < operations.size(); ++i) {
     if (operations[i].name == name) {
       return i;

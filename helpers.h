@@ -1,23 +1,21 @@
 std::random_device dev;
 std::mt19937_64 rng(dev());
-RandomInt randAll(0, arities.size() - 1);
-RandomInt randTerminals(0, maxTerminalId);
 RandomInt randBig(0, std::numeric_limits<int>::max());
 
-Arity getArity(CRProgram program, size_t i) {
-  return arities[program[i]];
+auto getArity(CRProgram program, size_t i) {
+  return operations[program[i]].arity;
 }
-std::string getName(CRProgram program, size_t i) {
-  return names[program[i]];
-}
-Id getRandOpId() {
-  return randAll(rng);
-}
-Id getRandTerminalId() {
-  return randTerminals(rng);
+auto getName(CRProgram program, size_t i) {
+  return operations[program[i]].name;
 }
 int rangedRandom(Range const & range) {
   return randBig(rng) % (range.end - range.start) + range.start;
+}
+Id getRandOpId() {
+  return rangedRandom({0, static_cast<int>(operations.size() - 1) });
+}
+Id getRandTerminalId() {
+  return rangedRandom({ 0, maxTerminalId });
 }
 std::string getSpaces(int nRepetitions) {
   std::string string("");

@@ -1,6 +1,6 @@
 size_t getBranchLen(CRProgram program, size_t startI) {
   size_t len = 1;
-  size_t toProceed = arities[program[startI]];
+  size_t toProceed = getArity(program, startI);
   while (toProceed > 0) {
     toProceed += getArity(program, startI + len);
     --toProceed;

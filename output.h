@@ -34,7 +34,7 @@ void output(std::vector<Program> programs) {
 std::string tform(CRProgram program, size_t i, int indent) {
   auto str = getSpaces(indent);
   str += getName(program, i) + "[" + std::to_string(i) + "]\n";
-  auto const arity = arities[program[i]];
+  auto const arity = getArity(program, i);
   ++i;
   for (size_t arityI = 0; arityI < arity; ++arityI) {
     str += tform(program, i, indent + 1);
