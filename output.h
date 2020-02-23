@@ -1,3 +1,4 @@
+std::string mform(CRProgram program, size_t startI);
 void output(CRProgram program, bool noMForm = false) {
   std::ofstream log;
   auto timeStamp = std::chrono::system_clock::now();
@@ -40,18 +41,4 @@ std::string tform(CRProgram program, size_t i, int indent) {
     i += getBranchLen(program, i);
   }
   return str;
-}
-std::string mform(CRProgram program, size_t startI) {
-  std::string str;
-  auto id = program[startI];
-  switch (id) {
-  case 0: return "1";
-  case 1: return "x";
-  case 2: return "(sin(" + mform(program, startI + 1) + "))";
-  case 3: return "(" + mform(program, startI + 1) 
-    + "+" + mform(program, startI + 1 + getBranchLen(program, startI + 1)) + ")";
-  case 4: return "(" + mform(program, startI + 1)
-    + "*" + mform(program, startI + 1 + getBranchLen(program, startI + 1)) + ")";
-  default: return 0;
-  }
 }

@@ -6,7 +6,7 @@ double getFitness(CRProgram program) {
   for (int i = 0; i < 100; ++i) {
     double x = static_cast<double>(rand()) / RAND_MAX * 10;
     //x = i + 1;
-    error += abs(goal(x) - proceedDepth(program, 0, x));
+    error += abs(goal(x) - proceed(program, 0, x));
   }
   return error;
 }
