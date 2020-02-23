@@ -1,4 +1,4 @@
-void growing() {
+void growing(size_t nPrograms, size_t maxDepth) {
   Program minProgram;
   double minFitness = 1000 * 1000;
   for (size_t i = 0; i < nPrograms; ++i) {
@@ -11,7 +11,7 @@ void growing() {
   }
   output(minProgram);
 }
-void breeding() {
+void breeding(size_t maxDepth) {
   while (true) {
     auto from = grow(maxDepth);
     auto to = grow(maxDepth);
@@ -25,8 +25,9 @@ void breeding() {
     system("pause");
   }
 }
-void evolution() {
-  std::vector<Program> programs = rampDepth(nPrograms, maxDepth, maxSize);
+void evolution(size_t nGenerations, size_t nPrograms, size_t nMutationsPerGeneration,
+  size_t maxSize, size_t maxDepth) {
+  std::vector<Program> programs = ramp(nPrograms, maxDepth, maxSize);
   for (size_t i = 0; i < nGenerations; ++i) {
     if (i % 1000 == 0 && i > 0) {
       std::cout << "Generation " + std::to_string(i) << std::endl;
@@ -36,9 +37,9 @@ void evolution() {
     }
     auto fitnesses = getFitnesses(programs);
     sift(programs, fitnesses);
-    crossover(programs);
+    crossover(programs, nPrograms, maxSize, maxDepth);
     for (size_t i = 0; i < nMutationsPerGeneration; ++i) {
-      mutate(programs);
+      mutate(programs, maxSize, maxDepth);
     }
   }
   output(getBest(programs));

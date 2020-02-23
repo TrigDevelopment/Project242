@@ -17,7 +17,7 @@ Program grow(size_t maxDepth) {
     return newProgram;
   }
 }
-Programs rampDepth(size_t nPrograms, size_t maxDepth, size_t maxSize) {
+Programs ramp(size_t nPrograms, size_t maxDepth, size_t maxSize) {
   Programs programs;
   while (programs.size() < nPrograms) {
     auto newProgram = grow(maxDepth);

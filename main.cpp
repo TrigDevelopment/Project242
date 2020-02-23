@@ -20,12 +20,12 @@
 #include "scenarios.h"
 
 int main() {
-  //breedingDepth();
-  //breedingDepth();
-  //std::cout << rangedRandom({0, 100}) << std::endl;
-  growing();
-  //evolution();
-  //mutation();
+  const size_t nGenerations = 3;
+  const size_t nPrograms = 200;
+  const size_t nMutationsPerGeneration = 40;
+  const size_t maxSize = std::numeric_limits<size_t>::max();
+  const size_t maxDepth = 28;
+  evolution(nGenerations, nPrograms, nMutationsPerGeneration, maxSize, maxDepth);
   system("pause");
   return 0;
 }

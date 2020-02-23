@@ -34,7 +34,7 @@ void debugProgram() {
     opId("B_1"),
       opId("A_7")
   };
-  auto breededProgram = breedBreadth(smallerProgram, otherSmallProgram, 2, 0, maxSize);
+  auto breededProgram = breed(smallerProgram, otherSmallProgram, 2, 0, maxSize);
   std::ofstream primes("tree.txt");
   primes << tformBreadth(breededProgram) << std::endl;
   //primes << tformBreadth(otherSmallProgram) << std::endl;

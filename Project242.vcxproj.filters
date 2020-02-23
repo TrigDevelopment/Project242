@@ -39,9 +39,6 @@
     <ClInclude Include="tests.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="params.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="sift.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
