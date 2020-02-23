@@ -118,6 +118,7 @@
     <ClInclude Include="fitness.h" />
     <ClInclude Include="helpers.h" />
     <ClInclude Include="init.h" />
+    <ClInclude Include="mutate.h" />
     <ClInclude Include="operations.h" />
     <ClInclude Include="output.h" />
     <ClInclude Include="params.h" />

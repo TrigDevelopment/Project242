@@ -49,9 +49,9 @@ double proceedDepth(CRProgram program, size_t i, Input x) {
   case 1: return x;
   case 2: return sin(proceedDepth(program, i + 1, x));
   case 3: return proceedDepth(program, i + 1, x) 
-    + proceedDepth(program, i + 1 + getBranchLenDepth(program, i + 1), x);
+    + proceedDepth(program, i + 1 + getBranchLen(program, i + 1), x);
   case 4: return proceedDepth(program, i + 1, x) 
-    * proceedDepth(program, i + 1 + getBranchLenDepth(program, i + 1), x);
+    * proceedDepth(program, i + 1 + getBranchLen(program, i + 1), x);
   default: return 0;
   }
 }

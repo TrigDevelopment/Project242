@@ -1,27 +1,6 @@
-Program growBreadth(int maxDepth) {
-  Program program;
-  int nextLevelLen = 1;
-  int depth = 1;
-
-  while (nextLevelLen > 0) {
-    int levelLen = nextLevelLen;
-    nextLevelLen = 0;
-    if (depth == maxDepth) {
-      for (int i = 0; i < levelLen; ++i) {
-        int newOp = randTerminals(rng);
-        program.push_back(newOp);
-      }
-    }
-    else {
-      for (int i = 0; i < levelLen; ++i) {
-        int newOp = randAll(rng);
-        nextLevelLen += arities[newOp];
-        program.push_back(newOp);
-      }
-    }
-    ++depth;
-  }
-  return program;
+Program grow(size_t maxDepth);
+Program getRandomProgram(size_t maxDepth) {
+  return grow(maxDepth);
 }
 Program grow(size_t maxDepth) {
   if (maxDepth == 1) {

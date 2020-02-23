@@ -11,7 +11,7 @@ using CRIndexes = std::vector<size_t> const &;
 using Input = double;
 std::string tform(CRProgram program, size_t i, int indent);
 std::string mform(CRProgram program, size_t startI);
-size_t getBranchLenDepth(CRProgram program, size_t startI);
+size_t getBranchLen(CRProgram program, size_t startI);
 struct Operation {
   std::string name;
   int arity;

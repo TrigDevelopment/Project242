@@ -26,3 +26,6 @@ std::string getSpaces(int nRepetitions) {
   }
   return string;
 }
+size_t getRandomNodeI(Program const & program) {
+  return rangedRandom(Range{ 0, static_cast<int>(program.size()) });
+}
