@@ -14,7 +14,7 @@ std::string mform(CRProgram program, size_t startI);
 size_t getBranchLen(CRProgram program, size_t startI);
 struct Operation {
   std::string name;
-  int arity;
+  size_t arity;
 };
 struct Range {
   int start;

@@ -23,12 +23,12 @@
 #include "scenarios.h"
 
 int main() {
-  const size_t nPopulations = 4;
-  const size_t nGenerations = 40;
-  const size_t nPrograms = 20;
-  const size_t nMutationsPerGeneration = 4;
+  const size_t nPopulations = 20;
+  const size_t nGenerations = 250;
+  const size_t nPrograms = 300;
+  const size_t nMutationsPerGeneration = 100;
   const size_t maxSize = std::numeric_limits<size_t>::max();
-  const size_t maxDepth = 8;
+  const size_t maxDepth = 16;
   auto best = evolution(nGenerations, nPrograms, nMutationsPerGeneration, maxSize, maxDepth);
   for (size_t i = 0; i < nPopulations; ++i) {
     best = getBetter(best,
