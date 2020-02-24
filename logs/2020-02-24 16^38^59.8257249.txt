@@ -1,0 +1,10 @@
+tform:
++[0]
+ x[1]
+ x[2]
+
+mform:
+(x+x)
+
+Fitness: 95851.7
+

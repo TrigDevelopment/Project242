@@ -3,9 +3,9 @@ double goal(double x) {
 }
 double getFitness(CRProgram program) {
   double error = 0;
-  for (int i = 0; i < 100; ++i) {
+  for (int i = 0; i < 10; ++i) {
     double x = static_cast<double>(rand()) / RAND_MAX * 10;
-    //x = i + 1;
+    x = i + 1;
     std::vector<double> memory(10);
     memory[0] = exp(1);
     error += abs(goal(x) - proceed(program, 0, x, memory));

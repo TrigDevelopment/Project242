@@ -1,0 +1,9 @@
+tform:
+-[0]
+ x[1]
+
+mform:
+(-x)
+
+Fitness: 79879.7
+

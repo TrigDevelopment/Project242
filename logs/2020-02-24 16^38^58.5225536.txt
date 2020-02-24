@@ -1,0 +1,10 @@
+tform:
+v[][0]
+ v[][1]
+  x[2]
+
+mform:
+v[v[x]]
+
+Fitness: 67849.8
+

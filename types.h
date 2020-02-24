@@ -12,9 +12,14 @@ using Input = double;
 std::string tform(CRProgram program, size_t i, int indent);
 std::string mform(CRProgram program, size_t startI);
 size_t getBranchLen(CRProgram program, size_t startI);
+enum class Operations;
+size_t getArity(CRProgram program, size_t i);
+std::string getName(CRProgram program, size_t i);
+size_t moduloDouble(double value, size_t m);
 struct Operation {
   std::string name;
   size_t arity;
+  Operations op;
 };
 struct Range {
   int start;

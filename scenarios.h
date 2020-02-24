@@ -28,6 +28,7 @@ void breeding(size_t maxDepth) {
 Program evolution(size_t nGenerations, size_t nPrograms, size_t nMutationsPerGeneration,
   size_t maxSize, size_t maxDepth) {
   std::vector<Program> programs = ramp(nPrograms, maxDepth, maxSize);
+  //output(programs);
   for (size_t i = 0; i < nGenerations; ++i) {
     if (i % 100000 == 0 && i > 0) {
       //std::cout << "Generation " << i << std::endl;

@@ -1,0 +1,16 @@
+tform:
++[0]
+ sin[1]
+  1[2]
+ +[3]
+  sin[4]
+   sin[5]
+    sin[6]
+     1[7]
+  1[8]
+
+mform:
+((sin1)+((sin(sin(sin1)))+1))
+
+Fitness: 41579.8
+

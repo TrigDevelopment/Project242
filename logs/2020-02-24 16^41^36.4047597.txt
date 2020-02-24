@@ -1,0 +1,13 @@
+tform:
+sin[0]
+ +[1]
+  sin[2]
+   x[3]
+  v[][4]
+   x[5]
+
+mform:
+(sin((sinx)+v[x]))
+
+Fitness: 34841.2
+
