@@ -18,7 +18,14 @@ void tournament(Programs & programs, std::vector<double> const & fitnesses) {
 }
 /* Return sorted vector of indexes */
 std::vector<size_t> selectForTournament(Programs const & programs) {
-  
+  std::unordered_set<int> numbers;
+  while (numbers.size() < 40)
+  {
+    numbers.insert(rangedRandom({0, programs.size()}));
+  }
+  std::vector<size_t> vec(numbers.begin(), numbers.end());
+  std::sort(vec.begin(), vec.end());
+  return vec;
 }
 void best(Programs & programs, std::vector<double> const & fitnesses) {
   std::vector<std::pair<size_t, double>> pairs;
