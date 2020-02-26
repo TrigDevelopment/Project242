@@ -1,3 +1,7 @@
+double proceed(CRProgram program, Input const & x) {
+  std::vector<double> memory(10, 0);
+  return proceed(program, 0, now(), x, memory);
+}
 size_t getBranchLen(CRProgram program, size_t startI) {
   size_t len = 1;
   size_t toProceed = getArity(program, startI);

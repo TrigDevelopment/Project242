@@ -1,4 +1,26 @@
+void tournament(Programs & programs, std::vector<double> const & fitnesses);
 void sift(Programs & programs, std::vector<double> const & fitnesses) {
+  best(programs, fitnesses);
+  //tournament(programs, fitnesses);
+}
+void tournament(Programs & programs, std::vector<double> const & fitnesses) {
+  auto selectedIndexes = selectForTournament(programs);
+
+  auto minFitness = std::numeric_limits<double>::max();
+  size_t minI = 0;
+  for (auto i : selectedIndexes) {
+    if (fitnesses[i] < minFitness) {
+      minI = i;
+      minFitness = fitnesses[i];
+    }
+  }
+  
+}
+/* Return sorted vector of indexes */
+std::vector<size_t> selectForTournament(Programs const & programs) {
+  
+}
+void best(Programs & programs, std::vector<double> const & fitnesses) {
   std::vector<std::pair<size_t, double>> pairs;
   for (size_t i = 0; i < fitnesses.size(); ++i) {
     pairs.push_back(std::make_pair(i, fitnesses[i]));
@@ -19,7 +41,6 @@ void sift(Programs & programs, std::vector<double> const & fitnesses) {
   for (auto const i : indexes) {
     programs.erase(programs.begin() + i);
   }
-  //roulette(programs, fitnesses);
 }
 void roulette(Programs & programs, std::vector<double> const & fitnesses) {
   std::vector<size_t> toKill;

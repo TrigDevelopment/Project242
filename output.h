@@ -1,4 +1,3 @@
-std::string mform(CRProgram program, size_t startI);
 void output(CRProgram program, bool noMForm = false) {
   std::ofstream log;
   auto timeStamp = std::chrono::system_clock::now();
@@ -15,6 +14,17 @@ void output(CRProgram program, bool noMForm = false) {
   log << "tform:" << std::endl;
   std::cout << tform(program, 0, 0) << std::endl;
   log << tform(program, 0, 0) << std::endl;
+
+  std::cout << "pform: " << std::endl;
+  log << "pform:" << std::endl;
+  std::cout << pform(program, 0) << std::endl;
+  log << pform(program, 0) << std::endl;
+
+  std::cout << "cform: " << std::endl;
+  log << "cform:" << std::endl;
+  std::cout << cform(program) << std::endl;
+  log << cform(program) << std::endl;
+
   if (!noMForm) {
     std::cout << "mform:" << std::endl;
     log << "mform:" << std::endl;
@@ -39,6 +49,29 @@ std::string tform(CRProgram program, size_t i, int indent) {
   for (size_t arityI = 0; arityI < arity; ++arityI) {
     str += tform(program, i, indent + 1);
     i += getBranchLen(program, i);
+  }
+  return str;
+}
+std::string pform(CRProgram program, size_t i) {
+  std::string str;
+  str += getName(program, i);
+  str += " ";
+  auto arity = getArity(program, i);
+  ++i;
+  for (size_t arityI = 0; arityI < arity; ++arityI) {
+    str += pform(program, i);
+    i += getBranchLen(program, i);
+  }
+  return str;
+}
+std::string cform(CRProgram program) {
+  std::string str;
+  for (int i = 0; i < 10; ++i) {
+    //double x = static_cast<double>(rand()) / RAND_MAX * 10;
+    double x = i + 1;
+
+    str += "  (" + std::to_string(goal(x)) + " " + std::to_string(proceed(program, x)) + ")";
+    str += "\n";
   }
   return str;
 }

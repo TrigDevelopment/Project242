@@ -1,7 +1,7 @@
 enum class Operations {
   one, x,
   sin, minus, getFromMemory,
-  plus, multiply, setToMemory
+  plus, multiply, setToMemory, whilePositiveDecrement
 };
 std::vector<Operation> const operations = {
   Operation{"1", 0, Operations::one}, 
@@ -11,13 +11,16 @@ std::vector<Operation> const operations = {
     Operation{"v[]", 1, Operations::getFromMemory},
   Operation{"+", 2, Operations::plus},
     Operation{"*", 2, Operations::multiply},
-    Operation{"v[]=", 2, Operations::setToMemory}
+    Operation{"v[]=", 2, Operations::setToMemory},
+    Operation{"whilePositiveDecrement", 2, Operations::whilePositiveDecrement}
 };
 
-std::vector<Range> const arityRanges = { Range{0, 2}, Range{2, 5}, Range{5, 8} };
+std::vector<Range> const arityRanges = { Range{0, 2}, Range{2, 5}, Range{5, 9} };
 
-size_t modulo(int value, size_t m);
-double proceed(CRProgram program, size_t i, Input x, std::vector<double> memory) {
+double whilePositiveDecrement(CRProgram program, size_t i, TimePoint const & startTime, 
+  Input x, std::vector<double> & memory);
+double proceed(CRProgram program, size_t i, TimePoint const & startTime,
+Input x, std::vector<double> & memory) {
   auto id = program[i];
   auto arity = getArity(program, i);
   auto name = getName(program, i);
@@ -32,7 +35,7 @@ double proceed(CRProgram program, size_t i, Input x, std::vector<double> memory)
     }
   }
   else if (arity == 1) {
-    auto arg = proceed(program, i + 1, x, memory);
+    auto arg = proceed(program, i + 1, startTime, x, memory);
     switch (op) {
     case Operations::sin:
       return sin(arg);
@@ -44,9 +47,9 @@ double proceed(CRProgram program, size_t i, Input x, std::vector<double> memory)
     }
   }
   else if (arity == 2) {
-    auto arg1 = proceed(program, i + 1, x, memory);
+    auto arg1 = proceed(program, i + 1, startTime, x, memory);
     auto index2 = i + 1 + getBranchLen(program, i + 1);
-    auto arg2 = proceed(program, index2, x, memory);
+    auto arg2 = proceed(program, index2, startTime, x, memory);
     switch (op) {
     case Operations::plus:
       return arg1 + arg2;
@@ -54,6 +57,8 @@ double proceed(CRProgram program, size_t i, Input x, std::vector<double> memory)
       return arg1 * arg2;
     case Operations::setToMemory:
       return memory[moduloDouble(arg1, memory.size())] = arg2;
+    case Operations::whilePositiveDecrement:
+      return whilePositiveDecrement(program, i, startTime, x, memory);
     default: return 0;
     }
   }
@@ -96,6 +101,8 @@ std::string mform(CRProgram program, size_t startI) {
       return  "(" + arg1 + "*" + arg2 + ")";
     case Operations::setToMemory:
       return "(v[" + arg1 + "]=" + arg2 + ")";
+    case Operations::whilePositiveDecrement:
+      return "wPD(" + arg1 + "){" + arg2 + "}";
     default: return "0";
     }
   }
@@ -111,15 +118,4 @@ Id opId(std::string const & name) {
 }
 Id getTerminal() {
   return opId("1");
-}
-size_t moduloDouble(double value, size_t m) {
-  int intValue = static_cast<int>(llround(value));
-  return modulo(intValue, m);
-}
-size_t modulo(int value, size_t m) {
-  int mod = value % static_cast<int>(m);
-  if (value < 0) {
-    mod += m;
-  }
-  return mod % m;
 }

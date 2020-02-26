@@ -9,9 +9,11 @@
 #include <chrono>
 #include <ctime> 
 #include <sstream>
+#include <unordered_set>
 
 #include "date.h"
 #include "types.h"
+#include "ops.h"
 #include "operations.h"
 #include "helpers.h"
 #include "init.h"
@@ -31,15 +33,15 @@ struct DebugParams {
   const size_t maxDepth = 8;
 } debugParams;
 struct ReleaseParams {
-  const size_t nPopulations = 40;
+  const size_t nPopulations = 4;
   const size_t nGenerations = 400;
   const size_t nPrograms = 200;
-  const size_t nMutationsPerGeneration = 200;
+  const size_t nMutationsPerGeneration = 50;
   const size_t maxSize = std::numeric_limits<size_t>::max();
   const size_t maxDepth = 14;
 } releaseParams;
 void evo() {
-  auto params = debugParams;
+  auto params = releaseParams;
   const size_t nPopulations = params.nPopulations;
   const size_t nGenerations = params.nGenerations;
   const size_t nPrograms = params.nPrograms;
