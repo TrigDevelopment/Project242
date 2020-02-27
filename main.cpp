@@ -13,17 +13,16 @@
 
 #include "date.h"
 #include "types.h"
+#include "program.h"
 #include "ops.h"
 #include "operations.h"
 #include "helpers.h"
 #include "init.h"
-#include "program.h"
 #include "mutate.h"
 #include "fitness.h"
 #include "sift.h"
 #include "output.h"
 #include "scenarios.h"
-#include "params.h"
 
 struct DebugParams : public Params {
   size_t nPopulations() const override {
@@ -50,7 +49,7 @@ struct DebugParams : public Params {
 } debugParams;
 struct ReleaseParams : public Params {
   size_t nPopulations() const override {
-    return 1;
+    return 5;
   }
   size_t nGenerations() const override {
     return 1000;
@@ -77,7 +76,7 @@ void evo() {
   std::ofstream file;
   file.open("a_output/table.csv");
   file << "StepI,PopulationI,BestFitness" << std::endl;
-  auto best = getRandomProgram(params.maxDepth());
+  auto best = Program::random(params.maxDepth());
   for (size_t i = 0; i < params.nPopulations(); ++i) {
     auto program = evolution(params, i, file);
     best = getBetter(best, program);

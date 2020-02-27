@@ -123,7 +123,6 @@
     <ClInclude Include="operations.h" />
     <ClInclude Include="ops.h" />
     <ClInclude Include="output.h" />
-    <ClInclude Include="params.h" />
     <ClInclude Include="program.h" />
     <ClInclude Include="scenarios.h" />
     <ClInclude Include="sift.h" />

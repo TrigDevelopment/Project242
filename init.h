@@ -1,6 +1,6 @@
-Program_ grow(size_t maxDepth);
-Program_ full(size_t depth);
-Program_ getRandomProgram(size_t maxDepth) {
+std::vector<Id> grow(size_t maxDepth);
+std::vector<Id> full(size_t depth);
+std::vector<Id> getRandomProgram(size_t maxDepth) {
   auto depth = rangedRandom({ 1, static_cast<int>(maxDepth + 1)});
   if (rangedRandom({ 0, 2 }) == 0) {
     return grow(depth);
@@ -9,14 +9,14 @@ Program_ getRandomProgram(size_t maxDepth) {
     return full(depth);
   }
 }
-Program_ grow(size_t maxDepth) {
+std::vector<Id> grow(size_t maxDepth) {
   if (maxDepth == 1) {
-    return Program_{ getRandTerminalId() };
+    return std::vector<Id>{ getRandTerminalId() };
   }
   else {
     Id id = getRandOpId();
-    Program_ newProgram{ id };
-    auto arity = getArity(newProgram, 0);
+    std::vector<Id> newProgram{ id };
+    auto arity = operations[newProgram[0]].arity;
     for (size_t i = 0; i < arity; ++i) {
       auto branch = grow(maxDepth - 1);
       newProgram.insert(newProgram.end(), branch.begin(), branch.end());
@@ -24,24 +24,24 @@ Program_ grow(size_t maxDepth) {
     return newProgram;
   }
 }
-Program_ full(size_t depth) {
+std::vector<Id> full(size_t depth) {
   if (depth == 1) {
-    return Program_{ getRandTerminalId() };
+    return std::vector<Id>{ getRandTerminalId() };
   }
   else {
     Id id = getRandNonTerminalId();
-    Program_ newProgram{ id };
-    auto arity = getArity(newProgram, 0);
+    std::vector<Id> newProgram{ id };
+    auto arity = operations[newProgram[0]].arity;
     for (size_t i = 0; i < arity; ++i) {
-      auto branch = grow(depth - 1);
+      auto branch = full(depth - 1);
       newProgram.insert(newProgram.end(), branch.begin(), branch.end());
     }
     return newProgram;
   }
 }
 
-Programs ramp(size_t nPrograms, size_t maxDepth, size_t maxSize) {
-  Programs programs;
+std::vector<Program> ramp(size_t nPrograms, size_t maxDepth, size_t maxSize) {
+  std::vector<Program> programs;
   while (programs.size() < nPrograms) {
     auto newProgram = getRandomProgram(maxDepth);
     if (newProgram.size() <= maxSize) {

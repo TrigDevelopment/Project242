@@ -1,0 +1,14 @@
+tform:
+*[0]
+ x[1]
+ *[2]
+  x[3]
+  x[4]
+
+pform:
+* x * x x 
+mform:
+(x*(x*x))
+
+Fitness: 31852.6
+

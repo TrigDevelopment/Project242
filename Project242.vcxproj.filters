@@ -54,9 +54,6 @@
     <ClInclude Include="ops.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="params.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

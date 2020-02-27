@@ -1,13 +1,5 @@
-std::random_device dev;
-std::mt19937_64 rng(dev());
-RandomInt randBig(0, std::numeric_limits<int>::max());
 
-size_t getArity(CRProgram program, size_t i) {
-  return operations[program[i]].arity;
-}
-std::string getName(CRProgram program, size_t i) {
-  return operations[program[i]].name;
-}
+
 int rangedRandom(Range const & range) {
   return randBig(rng) % (range.end - range.start) + range.start;
 }
@@ -27,7 +19,7 @@ std::string getSpaces(int nRepetitions) {
   }
   return string;
 }
-size_t getRandomNodeI(Program_ const & program) {
+size_t getRandomNodeI(Program const & program) {
   return rangedRandom(Range{ 0, static_cast<int>(program.size()) });
 }
 size_t moduloDouble(double value, size_t m) {

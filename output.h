@@ -1,4 +1,4 @@
-void output(CRProgram program, bool noMForm = false) {
+void output(Program const & program, bool noMForm = false) {
   std::ofstream log;
   auto timeStamp = std::chrono::system_clock::now();
   std::string name("logs/");
@@ -20,10 +20,10 @@ void output(CRProgram program, bool noMForm = false) {
   std::cout << pform(program, 0) << std::endl;
   log << pform(program, 0) << std::endl;
 
-  std::cout << "cform: " << std::endl;
-  log << "cform:" << std::endl;
-  std::cout << cform(program) << std::endl;
-  log << cform(program) << std::endl;
+  //std::cout << "cform: " << std::endl;
+  //log << "cform:" << std::endl;
+  //std::cout << cform(program) << std::endl;
+  //log << cform(program) << std::endl;
 
   if (!noMForm) {
     std::cout << "mform:" << std::endl;
@@ -31,8 +31,8 @@ void output(CRProgram program, bool noMForm = false) {
     std::cout << mform(program, 0) << std::endl << std::endl;
     log << mform(program, 0) << std::endl << std::endl;
   }
-  std::cout << "Fitness: " << getFitness(program) << std::endl << std::endl;
-  log << "Fitness: " << getFitness(program) << std::endl << std::endl;
+  std::cout << "Fitness: " << program.fitness() << std::endl << std::endl;
+  log << "Fitness: " << program.fitness() << std::endl << std::endl;
   log.close();
 }
 void output(std::vector<Program_> programs) {
@@ -41,36 +41,36 @@ void output(std::vector<Program_> programs) {
   }
 }
 
-std::string tform(CRProgram program, size_t i, int indent) {
+std::string tform(Program const & program, size_t i, int indent) {
   auto str = getSpaces(indent);
-  str += getName(program, i) + "[" + std::to_string(i) + "]\n";
-  auto arity = getArity(program, i);
+  str += program.name(i) + "[" + std::to_string(i) + "]\n";
+  auto arity = program.arity(i);
   ++i;
   for (size_t arityI = 0; arityI < arity; ++arityI) {
     str += tform(program, i, indent + 1);
-    i += getBranchLen(program, i);
+    i += getBranchLen(program.program(), i);
   }
   return str;
 }
-std::string pform(CRProgram program, size_t i) {
+std::string pform(Program const & program, size_t i) {
   std::string str;
-  str += getName(program, i);
+  str += program.name(i);
   str += " ";
-  auto arity = getArity(program, i);
+  auto arity = program.arity(i);
   ++i;
   for (size_t arityI = 0; arityI < arity; ++arityI) {
     str += pform(program, i);
-    i += getBranchLen(program, i);
+    i += getBranchLen(program.program(), i);
   }
   return str;
 }
-std::string cform(CRProgram program) {
+std::string cform(Program program) {
   std::string str;
   for (int i = 0; i < 10; ++i) {
     //double x = static_cast<double>(rand()) / RAND_MAX * 10;
     double x = i + 1;
 
-    str += "  (" + std::to_string(goal(x)) + " " + std::to_string(proceed(program, x)) + ")";
+    //str += "  (" + std::to_string(goal(x)) + " " + std::to_string(proceed(program, x)) + ")";
     str += "\n";
   }
   return str;

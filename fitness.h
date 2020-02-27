@@ -1,28 +1,19 @@
 double goal(double x) {
   return exp(x);
 }
-double getFitness(CRProgram program) {
-  double error = 0;
-  for (int i = 0; i < 10; ++i) {
-    //double x = static_cast<double>(rand()) / RAND_MAX * 10;
-    double x = i + 1;
-    
-    error += abs(goal(x) - proceed(program, x));
-  }
-  return error;
-}
-std::vector<double> getFitnesses(Programs const & programs) {
+
+std::vector<double> getFitnesses(std::vector<Program> const & programs) {
   std::vector<double> fitnesses;
   for (auto const & program : programs) {
-    fitnesses.push_back(getFitness(program));
+    fitnesses.push_back(program.fitness());
   }
   return fitnesses;
 }
-Program_ getBest(Programs const & programs) {
-  Program_ minProgram = programs[0];
-  double minFitness = getFitness(programs[0]);
+Program getBest(std::vector<Program> const & programs) {
+  Program minProgram = programs[0];
+  double minFitness = programs[0].fitness();
   for (auto const & program : programs) {
-    auto fitness = getFitness(program);
+    auto fitness = program.fitness();
     if (fitness < minFitness) {
       minProgram = program;
       minFitness = fitness;
@@ -30,8 +21,8 @@ Program_ getBest(Programs const & programs) {
   }
   return minProgram;
 }
-Program_ getBetter(CRProgram left, CRProgram right) {
-  return getFitness(left) < getFitness(right) ? left : right;
+Program getBetter(Program const & left, Program const & right) {
+  return left.fitness() < right.fitness() ? left : right;
 }
 double getSum(std::vector<double> fitnesses) {
   double sum = 0;

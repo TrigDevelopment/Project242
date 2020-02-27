@@ -1,9 +1,9 @@
 void growing(size_t nPrograms, size_t maxDepth) {
-  Program_ minProgram;
+  auto minProgram = Program::terminal();
   double minFitness = 1000 * 1000;
   for (size_t i = 0; i < nPrograms; ++i) {
-    auto newProgram = getRandomProgram(maxDepth);
-    auto newFitness = getFitness(newProgram);
+    auto newProgram = Program::random(maxDepth);
+    auto newFitness = newProgram.fitness();
     if (newFitness < minFitness) {
       minFitness = newFitness;
       minProgram = newProgram;
@@ -25,11 +25,12 @@ void breeding(size_t maxDepth) {
     system("pause");
   }
 }
-void toTable(Programs const & programs, size_t populationI, size_t stepI, 
+void toTable(std::vector<Program> const & programs, size_t populationI, size_t stepI,
   std::ofstream & file) {
   auto best = getBest(programs);
-  file << stepI << "," << populationI << "," << getFitness(best) << std::endl;
+  file << stepI << "," << populationI << "," << best.fitness() << std::endl;
 }
+/*
 void outputTimes(Programs const & programs, size_t stepI, std::ofstream & file) {
   for (size_t i = 0; i < programs.size(); ++i) {
     for (int j = 0; j < 10; ++j) {
@@ -41,34 +42,36 @@ void outputTimes(Programs const & programs, size_t stepI, std::ofstream & file) 
     }
   }
 }
-Program_ evolution(Params const & params, size_t populationI, std::ofstream & file) {
-  std::vector<Program_> programs = ramp(params.nPrograms(), params.maxDepth(), params.maxSize());
-  std::ofstream timesFile;
-  timesFile.open("a_output/timesFile.csv");
-  timesFile << "Time(us),Value" << std::endl;
+*/
+Program evolution(Params const & params, size_t populationI, std::ofstream & file) {
+  auto programs = ramp(params.nPrograms(), params.maxDepth(), params.maxSize());
+  //std::ofstream timesFile;
+  //timesFile.open("a_output/timesFile.csv");
+  //timesFile << "Time(us),Value" << std::endl;
 
   for (size_t i = 0; i < params.nGenerations(); ++i) {
-    outputTimes(programs, i, timesFile);
-    toTable(programs, populationI, i, file);
+    //outputTimes(programs, i, timesFile);
+    //toTable(programs, populationI, i, file);
 
-    auto fitnesses = getFitnesses(programs);
-    sift(programs, fitnesses, params.nPrograms() - params.freeSpaceForBreed());
+    sift(programs, params.nPrograms() - params.freeSpaceForBreed());
     crossover(programs, params.nPrograms(), params.maxSize(), params.maxDepth());
     for (size_t i = 0; i < params.nMutationsPerGeneration(); ++i) {
       mutate(programs, params.maxSize(), params.maxDepth());
     }
   }
 
-  timesFile.close();
-  toTable(programs, populationI, params.nGenerations(), file);
+  //timesFile.close();
+  //toTable(programs, populationI, params.nGenerations(), file);
   return getBest(programs);
 }
+/*
 void mutation() {
   while (true) {
     auto program = getRandomProgram(4);
     output(program, true);
-    auto mutatedProgram = getPointMutated(program);
+    auto mutatedProgram = program;
     output(mutatedProgram, true);
     system("pause");
   }
 }
+*/
