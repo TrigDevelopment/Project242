@@ -1,6 +1,6 @@
-Program grow(size_t maxDepth);
-Program full(size_t depth);
-Program getRandomProgram(size_t maxDepth) {
+Program_ grow(size_t maxDepth);
+Program_ full(size_t depth);
+Program_ getRandomProgram(size_t maxDepth) {
   auto depth = rangedRandom({ 1, static_cast<int>(maxDepth + 1)});
   if (rangedRandom({ 0, 2 }) == 0) {
     return grow(depth);
@@ -9,13 +9,13 @@ Program getRandomProgram(size_t maxDepth) {
     return full(depth);
   }
 }
-Program grow(size_t maxDepth) {
+Program_ grow(size_t maxDepth) {
   if (maxDepth == 1) {
-    return Program{ getRandTerminalId() };
+    return Program_{ getRandTerminalId() };
   }
   else {
     Id id = getRandOpId();
-    Program newProgram{ id };
+    Program_ newProgram{ id };
     auto arity = getArity(newProgram, 0);
     for (size_t i = 0; i < arity; ++i) {
       auto branch = grow(maxDepth - 1);
@@ -24,13 +24,13 @@ Program grow(size_t maxDepth) {
     return newProgram;
   }
 }
-Program full(size_t depth) {
+Program_ full(size_t depth) {
   if (depth == 1) {
-    return Program{ getRandTerminalId() };
+    return Program_{ getRandTerminalId() };
   }
   else {
     Id id = getRandNonTerminalId();
-    Program newProgram{ id };
+    Program_ newProgram{ id };
     auto arity = getArity(newProgram, 0);
     for (size_t i = 0; i < arity; ++i) {
       auto branch = grow(depth - 1);

@@ -1,11 +1,11 @@
-Program getPointMutated(CRProgram program);
-Program getSubtreeMutated(CRProgram program, size_t maxSize, size_t maxDepth);
+Program_ getPointMutated(CRProgram program);
+Program_ getSubtreeMutated(CRProgram program, size_t maxSize, size_t maxDepth);
 void mutate(Programs & programs, size_t maxSize, size_t maxDepth) {
   size_t programI = rangedRandom(Range{ 0, static_cast<int>(programs.size()) });
   auto const & newProgram = getSubtreeMutated(programs[programI], maxSize, maxDepth);
   programs.push_back(newProgram);
 }
-Program getPointMutated(CRProgram program) {
+Program_ getPointMutated(CRProgram program) {
   auto newProgram(program);
   auto point = getRandomNodeI(newProgram);
   auto arity = getArity(program, point);
@@ -13,7 +13,7 @@ Program getPointMutated(CRProgram program) {
   newProgram[point] = newOperation;
   return newProgram;
 }
-Program getSubtreeMutated(CRProgram program, size_t maxSize, size_t maxDepth) {
+Program_ getSubtreeMutated(CRProgram program, size_t maxSize, size_t maxDepth) {
   while (true) {
     auto newBranch = getRandomProgram(maxDepth);
     auto newProgram = program;

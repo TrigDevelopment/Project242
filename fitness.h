@@ -18,8 +18,8 @@ std::vector<double> getFitnesses(Programs const & programs) {
   }
   return fitnesses;
 }
-Program getBest(Programs const & programs) {
-  Program minProgram = programs[0];
+Program_ getBest(Programs const & programs) {
+  Program_ minProgram = programs[0];
   double minFitness = getFitness(programs[0]);
   for (auto const & program : programs) {
     auto fitness = getFitness(program);
@@ -30,7 +30,7 @@ Program getBest(Programs const & programs) {
   }
   return minProgram;
 }
-Program getBetter(CRProgram left, CRProgram right) {
+Program_ getBetter(CRProgram left, CRProgram right) {
   return getFitness(left) < getFitness(right) ? left : right;
 }
 double getSum(std::vector<double> fitnesses) {

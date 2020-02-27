@@ -35,7 +35,7 @@ void output(CRProgram program, bool noMForm = false) {
   log << "Fitness: " << getFitness(program) << std::endl << std::endl;
   log.close();
 }
-void output(std::vector<Program> programs) {
+void output(std::vector<Program_> programs) {
   for (auto const & program : programs) {
     output(program);
   }

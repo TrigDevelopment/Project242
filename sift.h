@@ -1,10 +1,13 @@
-void tournament(Programs & programs, std::vector<double> const & fitnesses);
-void sift(Programs & programs, std::vector<double> const & fitnesses) {
-  best(programs, fitnesses);
-  //tournament(programs, fitnesses);
+void tournament(Programs & programs, std::vector<double> const & fitnesses, size_t nProgramsToKeep);
+std::vector<size_t> selectForTournament(size_t nPrograms, size_t nProgramsToSelect);
+
+void sift(Programs & programs, std::vector<double> const & fitnesses, size_t nProgramsToKeep) {
+  //best(programs, fitnesses);
+  tournament(programs, fitnesses, nProgramsToKeep);
 }
-void tournament(Programs & programs, std::vector<double> const & fitnesses) {
-  auto selectedIndexes = selectForTournament(programs);
+void tournament(Programs & programs, std::vector<double> const & fitnesses, size_t nProgramsToKeep) {
+  size_t nProgramsToSelect = programs.size() - nProgramsToKeep + 1;
+  auto selectedIndexes = selectForTournament(programs.size(), nProgramsToSelect);
 
   auto minFitness = std::numeric_limits<double>::max();
   size_t minI = 0;
@@ -15,13 +18,18 @@ void tournament(Programs & programs, std::vector<double> const & fitnesses) {
     }
   }
   
+  for (auto it = selectedIndexes.rbegin(); it != selectedIndexes.rend(); ++it) {
+    if (*it != minI) {
+      programs.erase(programs.begin() + *it);
+    }
+  }
 }
 /* Return sorted vector of indexes */
-std::vector<size_t> selectForTournament(Programs const & programs) {
+std::vector<size_t> selectForTournament(size_t nPrograms, size_t nProgramsToSelect) {
   std::unordered_set<int> numbers;
-  while (numbers.size() < 40)
+  while (numbers.size() < nProgramsToSelect)
   {
-    numbers.insert(rangedRandom({0, programs.size()}));
+    numbers.insert(rangedRandom({0, static_cast<int>(nPrograms)}));
   }
   std::vector<size_t> vec(numbers.begin(), numbers.end());
   std::sort(vec.begin(), vec.end());

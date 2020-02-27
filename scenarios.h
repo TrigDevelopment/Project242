@@ -1,5 +1,5 @@
 void growing(size_t nPrograms, size_t maxDepth) {
-  Program minProgram;
+  Program_ minProgram;
   double minFitness = 1000 * 1000;
   for (size_t i = 0; i < nPrograms; ++i) {
     auto newProgram = getRandomProgram(maxDepth);
@@ -25,27 +25,43 @@ void breeding(size_t maxDepth) {
     system("pause");
   }
 }
-Program evolution(size_t nGenerations, size_t nPrograms, size_t nMutationsPerGeneration,
-  size_t maxSize, size_t maxDepth) {
-  std::vector<Program> programs = ramp(nPrograms, maxDepth, maxSize);
-  //output(programs);
-  for (size_t i = 0; i < nGenerations; ++i) {
-    if (i % 100000 == 0 && i > 0) {
-      //std::cout << "Generation " << i << std::endl;
-      auto best = getBest(programs);
-      //output(best);
-      //std::cout << getFitness(best) << std::endl;
-      //myfile << name << "," << i << "," << getFitness(best) << "," << mform(best, 0) << std::endl;
-    }
-    auto fitnesses = getFitnesses(programs);
-    sift(programs, fitnesses);
-    crossover(programs, nPrograms, maxSize, maxDepth);
-    for (size_t i = 0; i < nMutationsPerGeneration; ++i) {
-      mutate(programs, maxSize, maxDepth);
+void toTable(Programs const & programs, size_t populationI, size_t stepI, 
+  std::ofstream & file) {
+  auto best = getBest(programs);
+  file << stepI << "," << populationI << "," << getFitness(best) << std::endl;
+}
+void outputTimes(Programs const & programs, size_t stepI, std::ofstream & file) {
+  for (size_t i = 0; i < programs.size(); ++i) {
+    for (int j = 0; j < 10; ++j) {
+      double x = j + 1;
+      auto startTime = now();
+      double value = proceed(programs[i], x);
+      MicroSeconds timeElapsed = std::chrono::duration_cast<MicroSeconds>(now() - startTime);
+      file << timeElapsed.count() << "," << value << std::endl;
     }
   }
+}
+Program_ evolution(Params const & params, size_t populationI, std::ofstream & file) {
+  std::vector<Program_> programs = ramp(params.nPrograms(), params.maxDepth(), params.maxSize());
+  std::ofstream timesFile;
+  timesFile.open("a_output/timesFile.csv");
+  timesFile << "Time(us),Value" << std::endl;
+
+  for (size_t i = 0; i < params.nGenerations(); ++i) {
+    outputTimes(programs, i, timesFile);
+    toTable(programs, populationI, i, file);
+
+    auto fitnesses = getFitnesses(programs);
+    sift(programs, fitnesses, params.nPrograms() - params.freeSpaceForBreed());
+    crossover(programs, params.nPrograms(), params.maxSize(), params.maxDepth());
+    for (size_t i = 0; i < params.nMutationsPerGeneration(); ++i) {
+      mutate(programs, params.maxSize(), params.maxDepth());
+    }
+  }
+
+  timesFile.close();
+  toTable(programs, populationI, params.nGenerations(), file);
   return getBest(programs);
-  //output(getBest(programs));
 }
 void mutation() {
   while (true) {

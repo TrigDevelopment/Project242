@@ -27,7 +27,7 @@ std::string getSpaces(int nRepetitions) {
   }
   return string;
 }
-size_t getRandomNodeI(Program const & program) {
+size_t getRandomNodeI(Program_ const & program) {
   return rangedRandom(Range{ 0, static_cast<int>(program.size()) });
 }
 size_t moduloDouble(double value, size_t m) {

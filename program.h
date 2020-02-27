@@ -1,3 +1,10 @@
+class Program {
+public:
+  Program() {
+    
+  }
+};
+
 double proceed(CRProgram program, Input const & x) {
   std::vector<double> memory(10, 0);
   return proceed(program, 0, now(), x, memory);
@@ -12,11 +19,11 @@ size_t getBranchLen(CRProgram program, size_t startI) {
   }
   return len;
 }
-void eraseBranch(Program & program, size_t i) {
+void eraseBranch(Program_ & program, size_t i) {
   program.erase(program.begin() + i,
     program.begin() + i + getBranchLen(program, i));
 }
-Program breed(CRProgram from, CRProgram to, size_t fromRootI, size_t toRootI) {
+Program_ breed(CRProgram from, CRProgram to, size_t fromRootI, size_t toRootI) {
   auto newProgram = to;
   eraseBranch(newProgram, toRootI);
   newProgram.insert(newProgram.begin() + toRootI,

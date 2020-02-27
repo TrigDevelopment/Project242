@@ -5,7 +5,7 @@ double whilePositiveDecrement(CRProgram program, size_t i, TimePoint const & sta
     size_t memoryIndex = moduloDouble(proceed(program, i + 1, startTime, x, memory), memory.size());
     std::chrono::microseconds timeElapsed =
       std::chrono::duration_cast<std::chrono::microseconds>(now() - startTime); //do not use auto keyword
-    if (memory[memoryIndex] < 0 || timeElapsed.count() > 10) {
+    if (memory[memoryIndex] < 0 || timeElapsed.count() > 100) {
       return 0;
     }
     else {

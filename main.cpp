@@ -23,37 +23,67 @@
 #include "sift.h"
 #include "output.h"
 #include "scenarios.h"
+#include "params.h"
 
-struct DebugParams {
-  const size_t nPopulations = 2;
-  const size_t nGenerations = 12;
-  const size_t nPrograms = 7;
-  const size_t nMutationsPerGeneration = 4;
-  const size_t maxSize = std::numeric_limits<size_t>::max();
-  const size_t maxDepth = 8;
+struct DebugParams : public Params {
+  size_t nPopulations() const override {
+    return 2;
+  }
+  size_t nGenerations() const override {
+    return 6;
+  }
+  size_t nPrograms() const override {
+    return 7;
+  }
+  size_t freeSpaceForBreed() const override {
+    return nPrograms() / 2;
+  }
+  size_t nMutationsPerGeneration() const override {
+    return 4;
+  }
+  size_t maxSize() const override {
+    return std::numeric_limits<size_t>::max();
+  }
+  size_t maxDepth() const override {
+    return 8;
+  }
 } debugParams;
-struct ReleaseParams {
-  const size_t nPopulations = 4;
-  const size_t nGenerations = 400;
-  const size_t nPrograms = 200;
-  const size_t nMutationsPerGeneration = 50;
-  const size_t maxSize = std::numeric_limits<size_t>::max();
-  const size_t maxDepth = 14;
+struct ReleaseParams : public Params {
+  size_t nPopulations() const override {
+    return 1;
+  }
+  size_t nGenerations() const override {
+    return 1000;
+  }
+  size_t nPrograms() const override {
+    return 200;
+  }
+  size_t freeSpaceForBreed() const override {
+    return static_cast<size_t>(nPrograms() * 0.3);
+  }
+  size_t nMutationsPerGeneration() const override {
+    return 20;
+  }
+  size_t maxSize() const override {
+    return std::numeric_limits<size_t>::max();
+  }
+  size_t maxDepth() const override {
+    return 16;
+  }
 } releaseParams;
+
 void evo() {
   auto params = releaseParams;
-  const size_t nPopulations = params.nPopulations;
-  const size_t nGenerations = params.nGenerations;
-  const size_t nPrograms = params.nPrograms;
-  const size_t nMutationsPerGeneration = params.nMutationsPerGeneration;
-  const size_t maxSize = params.maxSize;
-  const size_t maxDepth = params.maxDepth;
-  auto best = evolution(nGenerations, nPrograms, nMutationsPerGeneration, maxSize, maxDepth);
-  for (size_t i = 0; i < nPopulations - 1; ++i) {
-    best = getBetter(best,
-      evolution(nGenerations, nPrograms, nMutationsPerGeneration, maxSize, maxDepth));
+  std::ofstream file;
+  file.open("a_output/table.csv");
+  file << "StepI,PopulationI,BestFitness" << std::endl;
+  auto best = getRandomProgram(params.maxDepth());
+  for (size_t i = 0; i < params.nPopulations(); ++i) {
+    auto program = evolution(params, i, file);
+    best = getBetter(best, program);
   }
   output(best);
+  file.close();
 }
 
 int main() {
