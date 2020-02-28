@@ -1,0 +1,27 @@
+freeSpaceForBreed: 60
+maxDepth: 16
+maxSize: 4294967295
+nGenerations: 1000
+nMutationsPerGeneration: 20
+nPopulations: 5
+nPrograms: 200
+tform:
+*[0]
+ -[1]
+  *[2]
+   x[3]
+   1[4]
+ +[5]
+  v[][6]
+   x[7]
+  whilePositiveDecrement[8]
+   x[9]
+   1[10]
+
+pform:
+* - * x 1 + v[] x whilePositiveDecrement x 1 
+mform:
+((-(x*1))*(v[x]+wPD(x){1}))
+
+Fitness: 17629.8
+

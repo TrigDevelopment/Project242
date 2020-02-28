@@ -1,0 +1,29 @@
+freeSpaceForBreed: 3
+maxDepth: 8
+maxSize: 4294967295
+nGenerations: 6
+nMutationsPerGeneration: 4
+nPopulations: 1
+nPrograms: 7
+tform:
++[0]
+ x[1]
+ v[][2]
+  *[3]
+   sin[4]
+    x[5]
+   v[]=[6]
+    *[7]
+     1[8]
+     1[9]
+    *[10]
+     x[11]
+     1[12]
+
+pform:
++ x v[] * sin x v[]= * 1 1 * x 1 
+mform:
+(x+v[((sinx)*(v[(1*1)]=(x*1)))])
+
+Fitness: 34733.8
+

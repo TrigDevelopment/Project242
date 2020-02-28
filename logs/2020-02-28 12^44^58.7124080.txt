@@ -1,0 +1,65 @@
+freeSpaceForBreed: 60
+maxDepth: 12
+maxSize: 4294967295
+nGenerations: 1000
+nMutationsPerGeneration: 20
+nPopulations: 200
+nPrograms: 200
+tform:
++[0]
+ *[1]
+  v[][2]
+   v[][3]
+    whilePositiveDecrement[4]
+     *[5]
+      whilePositiveDecrement[6]
+       sin[7]
+        v[]=[8]
+         -[9]
+          *[10]
+           x[11]
+           x[12]
+         1[13]
+       *[14]
+        x[15]
+        x[16]
+      v[]=[17]
+       1[18]
+       *[19]
+        -[20]
+         x[21]
+        x[22]
+     v[][23]
+      -[24]
+       v[]=[25]
+        +[26]
+         v[]=[27]
+          v[]=[28]
+           x[29]
+           1[30]
+          v[]=[31]
+           1[32]
+           1[33]
+         -[34]
+          x[35]
+        +[36]
+         +[37]
+          -[38]
+           1[39]
+          +[40]
+           x[41]
+           1[42]
+         -[43]
+          *[44]
+           1[45]
+           x[46]
+  x[47]
+ 1[48]
+
+pform:
++ * v[] v[] whilePositiveDecrement * whilePositiveDecrement sin v[]= - * x x 1 * x x v[]= 1 * - x x v[] - v[]= + v[]= v[]= x 1 v[]= 1 1 - x + + - 1 + x 1 - * 1 x x 1 
+mform:
+((v[v[wPD((wPD((sin(v[(-(x*x))]=1))){(x*x)}*(v[1]=((-x)*x)))){v[(-(v[((v[(v[x]=1)]=(v[1]=1))+(-x))]=(((-1)+(x+1))+(-(1*x)))))]}]]*x)+1)
+
+Fitness: 11755.6
+

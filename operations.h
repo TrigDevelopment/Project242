@@ -1,5 +1,3 @@
-
-
 std::vector<Range> const arityRanges = { Range{0, 2}, Range{2, 5}, Range{5, 9} };
 
 std::string mform(Program const & program, size_t startI) {
@@ -28,7 +26,8 @@ std::string mform(Program const & program, size_t startI) {
     default: return "0";
     }
   }
-  else if (arity == 2) {
+  else if (arity == 2) 
+  {
     auto arg1 = mform(program, startI + 1);
     auto index2 = program.childI(startI, 1);
     auto arg2 = mform(program, index2);

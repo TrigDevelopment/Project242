@@ -51,7 +51,7 @@ Program evolution(Params const & params, size_t populationI, std::ofstream & fil
 
   for (size_t i = 0; i < params.nGenerations(); ++i) {
     //outputTimes(programs, i, timesFile);
-    //toTable(programs, populationI, i, file);
+    toTable(programs, populationI, i, file);
 
     sift(programs, params.nPrograms() - params.freeSpaceForBreed());
     crossover(programs, params.nPrograms(), params.maxSize(), params.maxDepth());

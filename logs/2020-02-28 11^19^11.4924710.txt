@@ -1,0 +1,21 @@
+freeSpaceForBreed: 60
+maxDepth: 16
+maxSize: 4294967295
+nGenerations: 100
+nMutationsPerGeneration: 20
+nPopulations: 1
+nPrograms: 200
+tform:
+*[0]
+ *[1]
+  x[2]
+  1[3]
+ 1[4]
+
+pform:
+* * x 1 1 
+mform:
+((x*1)*1)
+
+Fitness: 17629.8
+

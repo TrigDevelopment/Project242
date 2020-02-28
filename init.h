@@ -33,7 +33,7 @@ std::vector<Id> full(size_t depth) {
     std::vector<Id> newProgram{ id };
     auto arity = operations[newProgram[0]].arity;
     for (size_t i = 0; i < arity; ++i) {
-      auto branch = full(depth - 1);
+      auto branch = grow(depth - 1);
       newProgram.insert(newProgram.end(), branch.begin(), branch.end());
     }
     return newProgram;

@@ -21,12 +21,10 @@
 #include "mutate.h"
 #include "fitness.h"
 #include "sift.h"
-#include "output.h"
-#include "scenarios.h"
 
 struct DebugParams : public Params {
   size_t nPopulations() const override {
-    return 2;
+    return 1;
   }
   size_t nGenerations() const override {
     return 6;
@@ -42,6 +40,7 @@ struct DebugParams : public Params {
   }
   size_t maxSize() const override {
     return std::numeric_limits<size_t>::max();
+    //see mutated and crossover method. Don't use until fixed
   }
   size_t maxDepth() const override {
     return 8;
@@ -49,10 +48,10 @@ struct DebugParams : public Params {
 } debugParams;
 struct ReleaseParams : public Params {
   size_t nPopulations() const override {
-    return 5;
+    return 100;
   }
   size_t nGenerations() const override {
-    return 1000;
+    return 2000;
   }
   size_t nPrograms() const override {
     return 200;
@@ -71,6 +70,9 @@ struct ReleaseParams : public Params {
   }
 } releaseParams;
 
+#include "output.h"
+#include "scenarios.h"
+
 void evo() {
   auto params = releaseParams;
   std::ofstream file;
@@ -81,11 +83,12 @@ void evo() {
     auto program = evolution(params, i, file);
     best = getBetter(best, program);
   }
-  output(best);
+  output(best, params);
   file.close();
 }
 
 int main() {
+  //auto program = Program::random(5);
   evo();
   //auto population = ramp(10, 12, std::numeric_limits<size_t>::max());
   //output(population);

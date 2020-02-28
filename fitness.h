@@ -2,13 +2,6 @@ double goal(double x) {
   return exp(x);
 }
 
-std::vector<double> getFitnesses(std::vector<Program> const & programs) {
-  std::vector<double> fitnesses;
-  for (auto const & program : programs) {
-    fitnesses.push_back(program.fitness());
-  }
-  return fitnesses;
-}
 Program getBest(std::vector<Program> const & programs) {
   Program minProgram = programs[0];
   double minFitness = programs[0].fitness();

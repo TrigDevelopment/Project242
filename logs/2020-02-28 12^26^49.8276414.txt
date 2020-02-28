@@ -1,0 +1,45 @@
+freeSpaceForBreed: 60
+maxDepth: 12
+maxSize: 4294967295
+nGenerations: 1000
+nMutationsPerGeneration: 20
+nPopulations: 1
+nPrograms: 200
+tform:
+v[]=[0]
+ v[][1]
+  -[2]
+   v[]=[3]
+    +[4]
+     *[5]
+      *[6]
+       -[7]
+        v[]=[8]
+         x[9]
+         x[10]
+       v[][11]
+        v[][12]
+         1[13]
+      1[14]
+     v[][15]
+      whilePositiveDecrement[16]
+       +[17]
+        1[18]
+        -[19]
+         v[]=[20]
+          1[21]
+          v[][22]
+           1[23]
+       x[24]
+    *[25]
+     x[26]
+     1[27]
+ x[28]
+
+pform:
+v[]= v[] - v[]= + * * - v[]= x x v[] v[] 1 1 v[] whilePositiveDecrement + 1 - v[]= 1 v[] 1 x * x 1 x 
+mform:
+(v[v[(-(v[((((-(v[x]=x))*v[v[1]])*1)+v[wPD((1+(-(v[1]=v[1])))){x}])]=(x*1)))]]=x)
+
+Fitness: 15788.9
+

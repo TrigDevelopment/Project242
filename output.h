@@ -1,4 +1,6 @@
-void output(Program const & program, bool noMForm = false) {
+void output(Program const & program, 
+  Params const & params = releaseParams, bool noMForm = false) 
+{
   std::ofstream log;
   auto timeStamp = std::chrono::system_clock::now();
   std::string name("logs/");
@@ -9,6 +11,14 @@ void output(Program const & program, bool noMForm = false) {
   name += ".txt";
   std::replace(name.begin(), name.end(), ':', '^');
   log.open(name);
+
+  log << "freeSpaceForBreed: " << params.freeSpaceForBreed() << std::endl;
+  log << "maxDepth: " << params.maxDepth() << std::endl;
+  log << "maxSize: " << params.maxSize() << std::endl;
+  log << "nGenerations: " << params.nGenerations() << std::endl;
+  log << "nMutationsPerGeneration: " << params.nMutationsPerGeneration() << std::endl;
+  log << "nPopulations: " << params.nPopulations() << std::endl;
+  log << "nPrograms: " << params.nPrograms() << std::endl;
 
   std::cout << "tform:" << std::endl;
   log << "tform:" << std::endl;
@@ -48,7 +58,7 @@ std::string tform(Program const & program, size_t i, int indent) {
   ++i;
   for (size_t arityI = 0; arityI < arity; ++arityI) {
     str += tform(program, i, indent + 1);
-    i += getBranchLen(program.program(), i);
+    i += program.branchSize(i);
   }
   return str;
 }
@@ -60,7 +70,7 @@ std::string pform(Program const & program, size_t i) {
   ++i;
   for (size_t arityI = 0; arityI < arity; ++arityI) {
     str += pform(program, i);
-    i += getBranchLen(program.program(), i);
+    i += program.branchSize(i);
   }
   return str;
 }

@@ -14,14 +14,18 @@ public:
 
   Program(std::vector<Id> const & initProgram) 
   : _program(initProgram)
+  , _branchSizes(initProgram.size())
   {
     _fitness = 0;
     for (int i = 0; i < 10; ++i) {
       //double x = static_cast<double>(rand()) / RAND_MAX * 10;
       double x = i + 1;
       std::vector<double> memory(10, 0);
-      _fitness += abs(goal(x) - proceed(0, now(), x, memory));
+      auto value = proceed(0, now(), x, memory);
+      _fitness += abs(goal(x) - value);
     }
+    auto m = pform(*this, 0);
+    setBranchSizes(0);
   }
 
   double fitness() const
@@ -49,32 +53,77 @@ public:
     return _program.size();
   }
 
-  Program getSubtreeMutated(size_t maxSize, size_t maxDepth) const
+  size_t depth(size_t point) const
   {
-    while (true) {
-      auto newBranch = getRandomProgram(maxDepth);
-      auto newProgram = _program;
-      auto point = rangedRandom(Range{ 0, static_cast<int>(_program.size()) });
-      eraseBranch(newProgram, point);
-      newProgram.insert(newProgram.begin() + point,
-        newBranch.begin(),
-        newBranch.begin() + getBranchLen(newBranch, 0));
-      if (valid(newProgram, maxSize, maxDepth)) {
-        return newProgram;
+    size_t dep = 1;
+    size_t parentI = 0;
+    while (point != parentI) {
+      ++dep;
+      for (int i = arity(parentI); i >= 0; --i) {
+        auto chI = childI(parentI, i);
+        if (point >= chI) {
+          parentI = chI;
+          break;
+        }
       }
     }
+    return dep;
+  }
+
+  size_t subtreeDepth(size_t parentI) const
+  {
+    size_t dep = 0;
+    for (size_t i = 0; i < arity(parentI); ++i) {
+      auto chI = childI(parentI, i);
+      dep = std::max(dep, subtreeDepth(chI));
+    }
+    return dep + 1;
+  }
+
+  size_t branchSize(size_t i) const
+  {
+    return _branchSizes[i];
+  }
+
+  Program mutated(size_t maxSize, size_t maxDepth) const
+  {
+    auto newProgram = _program;
+    auto point = rangedRandom(Range{ 0, static_cast<int>(_program.size()) });
+    auto newBranch = getRandomProgram(maxDepth - depth(point) + 1);
+    eraseBranch(newProgram, point);
+    newProgram.insert(newProgram.begin() + point,
+      newBranch.begin(), newBranch.end());
+    return Program(newProgram);
+    /*
+    auto x = 0;
+    while (true) {
+      auto newProgram = _program;
+      auto point = rangedRandom(Range{ 0, static_cast<int>(_program.size()) });
+      auto newBranch = getRandomProgram(maxDepth - depth(point) + 1);
+      eraseBranch(newProgram, point);
+      newProgram.insert(newProgram.begin() + point,
+        newBranch.begin(), newBranch.end());
+      if (valid(newProgram, maxSize, maxDepth)) {
+        std::cout << x << std::endl;
+        x = 0;
+        //++nSuccess;
+        return Program(newProgram);
+      }
+      else {
+        x++;
+      }
+    }
+    */
   }
 
   size_t childI(size_t parentI, size_t childSiblingI) const
   {
-    if (childSiblingI == 0)
+    size_t childI = parentI + 1;
+    for (size_t i = 0; i < childSiblingI; ++i)
     {
-      return parentI + 1;
+      childI += branchSize(childI);
     }
-    else if (childSiblingI == 1)
-    {
-      return parentI + 1 + getBranchLen(_program, parentI + 1);
-    }
+    return childI;
   }
 
   std::vector<Id> const & program() const
@@ -85,6 +134,18 @@ public:
 private:
 
   std::vector<Id> _program;
+
+  std::vector<size_t> _branchSizes;
+
+  void setBranchSizes(size_t startI)
+  {
+    auto nodeI = startI + 1;
+    for (size_t i = 0; i < arity(startI); ++i) {
+      setBranchSizes(nodeI);
+      nodeI += _branchSizes[nodeI];
+    }
+    _branchSizes[startI] = nodeI - startI;
+  }
 
   double _fitness;
 
@@ -117,8 +178,8 @@ private:
     }
     else if (_arity == 2) {
       auto arg1 = proceed(i + 1, startTime, x, memory);
-      auto index2 = i + 1 + getBranchLen(_program, i + 1);
-      auto arg2 = proceed(index2, startTime, x, memory);
+      //auto index2 = i + 1 + getBranchLen(_program, i + 1);
+      auto arg2 = proceed(childI(i, 1), startTime, x, memory);
       switch (op) {
       case Operations::plus:
         return arg1 + arg2;
@@ -179,7 +240,7 @@ Program_ breed(CRProgram from, CRProgram to, size_t fromRootI, size_t toRootI) {
   return newProgram;
 }
 bool valid(CRProgram program, size_t maxSize, size_t maxDepth) {
-  return program.size() <= maxSize && getBranchLen(program, 0) <= maxDepth;
+  return program.size() <= maxSize;// && getBranchLen(program, 0) <= maxDepth;
 }
 void crossover(std::vector<Program> & programs, size_t nPrograms, size_t maxSize, size_t maxDepth) {
   while (programs.size() < nPrograms) {
@@ -187,12 +248,10 @@ void crossover(std::vector<Program> & programs, size_t nPrograms, size_t maxSize
     auto to = programs[randBig(rng) % programs.size()];
     size_t fromRootI = randBig(rng) % from.size();
     size_t toRootI = randBig(rng) % to.size();
-    auto newProgram = breed(from.program(), to.program(), fromRootI, toRootI);
-    if (valid(newProgram, maxSize, maxDepth)) {
-      programs.push_back(newProgram);
-    }
-    else {
-      //programs.push_back(from);
+    size_t resultDepth = from.subtreeDepth(fromRootI) + to.depth(toRootI) - 1;
+    if (resultDepth <= maxDepth) {
+      auto newProgram = breed(from.program(), to.program(), fromRootI, toRootI);
+      programs.push_back(Program(newProgram));
     }
   }
 }
